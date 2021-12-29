@@ -193,6 +193,9 @@ a:hover{
 .espacio_cabecera{
   padding-top: 3%;
 }
+.espacio{
+  padding-top: 2%;
+}
 .fondo_central{
   background: linear-gradient(#05604b 2%, #00977e 40%);
   width: 100%;
@@ -322,4 +325,68 @@ a:hover{
 }
 .dropzone .dz-preview.dz-image-preview {
   background: transparent ;
+}
+/**estilos nuevo informe***/
+.fondo_paginas{
+  background: #eee;
+  width: 100%;
+  min-height: 300px;
+}
+.bg_card{
+  background: #fff;
+}
+.font_titulo{
+  color:#545658;
+}
+.font_dato, .font_datos{
+  color:#545658;
+  width: 73px;
+}
+.font_datos{
+  width: 93px;
+}
+.input-group-addon {
+  padding: 5px 10px;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1;
+  text-align: center;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.margen_left{
+  margin-left: 5%;
+}
+.radio{
+  display: inline;
+ position: relative;
+ top: 5px;
+ height: 23px;
+ width: 30px;
+ border-radius: 100%;
+}
+.fotos_informe{
+  width: 15%;
+}
+.input_form{
+  display: inline;
+  width: 83%;
+}
+.input_form_detalle{
+  display: inline;
+  width: 91.5%;
+}
+.css_btn{
+  width: 150px;
+  height: 40px;
+  border-radius: 4px;
+  color:#fff;
+  text-align: center;
+  padding-top: 9px;
+  background-image: linear-gradient(#198754, #198754,#0f5132);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+.color_plomo{
+  color:#545658;
 }

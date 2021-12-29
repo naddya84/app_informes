@@ -32,7 +32,7 @@
   <div class="contenedor_menu" id="menu_gerente">
     <a class="css_inicio left" href="reporte_alertas.php">ALERTAS</a>
     <a class="css_inicio left" href="home_<?= $usuario->rol ?>.php" >HOME</a>  
-    <a class="css_inicio left" href="nuevo_informe.php">NUEVO INFORME</a>
+    <a class="css_inicio left" href="registro_informe.php">NUEVO INFORME</a>
     <a class="css_inicio left" href="reportes.php">REPORTES</a>
   </div>
 </div>      
