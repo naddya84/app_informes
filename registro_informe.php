@@ -97,7 +97,7 @@ $instituciones = ORM::for_table('institucion')->find_many();
                   <select id="institucion" class="form-control input_form">
                     <option value="">Sin Asignar</option>                                                                                  
                       <?php foreach ( $instituciones as $institucion ){ ?>
-                      <option value="<?=$institucion->id?>'<?=$institucion->nombre?>"
+                      <option value="<?=$institucion->id?>"
                               <?=isset($informe_edit)?($informe_edit->id==$informe_edit->id_institucion?'selected':''):''?>><?=$institucion->nombre?></option>
                       <?php } ?>
                     </select>
@@ -163,6 +163,7 @@ $instituciones = ORM::for_table('institucion')->find_many();
         <br>
       </div>
     </div>
+    <?php include 'pie_pagina.php'; ?>
     <!--Ventana emergente contacto -->
     <div id="fondo_pop" class="popup-overlay"></div>
     <div id="mensaje_form" class="popup" >

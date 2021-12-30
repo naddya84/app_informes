@@ -51,8 +51,8 @@ function iniciar(){
   $("#btn_guardar").click(function(){
     if(validar_datos()){ 
       $("#div_cargando").fadeIn();
-      estado = "pendiente";
-      registrar_informe();
+      estado = "pendiente"; 
+      registrar_informe(estado);
     }
   });
   
@@ -129,7 +129,7 @@ function registrar_informe(estado){
     multa: $("input[name='multa']:checked").val(),
     fecha_limite: $("#fecha_limite").val(),
     email: $.trim( $("#email").val() ),
-    id_institucion: $.trim( $("#institucion").val() ),
+    id_institucion: $("#institucion").val() ,
     fotos_informe: fotos_informe,
     estado: estado
   };
