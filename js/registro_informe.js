@@ -133,8 +133,8 @@ function registrar_informe(estado){
     fotos_informe: fotos_informe,
     estado: estado
   };
-  if($("#id_informe").val() > 0){
-    data.id_informe = $("#id_informe").val();
+  if($("#id_informe").val() > 0){  
+    data.id = $("#id_informe").val();
   }
   fetch('services/set_informe.php',  {
     method: 'POST',

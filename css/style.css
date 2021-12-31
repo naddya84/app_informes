@@ -197,7 +197,7 @@ a:hover{
   padding-top: 2%;
 }
 .fondo_central{
-  background: linear-gradient(#05604b 2%, #00977e 40%);
+  background: linear-gradient(to bottom, #d5d9d8, #fff, #d8d9db);
   width: 100%;
   min-height: 400px;
 } 
@@ -211,7 +211,7 @@ a:hover{
 .css_tabla{
   padding-top: 0.5%;
   padding-bottom:  0.5%;
-  color: #055160;
+  color: #000;
   background: #ffe786;
   width: 99%;
   margin-left: 0.5%;
@@ -220,6 +220,7 @@ a:hover{
   padding-top: 1%;
   padding-bottom: 1%;
   background: #eaf7f1;
+  color: #055160;
   width: 99%;
   margin-bottom: 3px;
   margin-left: 0.5%;
@@ -246,26 +247,28 @@ a:hover{
 .tm_opciones{
   margin-left: 2%;
   min-width: 90px;
-  width: 30%;
+  width: 29%;
 }
 .tab_home{
   min-width: 12px;
-  background: #d6d6d4;
+  background: #b7b7b6;
   color: #000;
-  border-top-left-radius: 8px;
-  border-top-right-radius: 8px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 21px;
   margin-right: 2px;
-  height: 38px;
-  padding-top: 8px;
+  height: 40px;
+  padding-top: 11px;
+  min-width: 90px;
   cursor: pointer;
   text-align: center;
+  box-shadow: 0 0px 0px 0px rgb(0 0 0 / 2%), 4px 0px 11px 0 rgb(0 0 0 / 13%);
 }
 .tab_home:hover{
   color: black;
 }
 .tab_home_sel{
   color: #198754;
-  background: #fff;
+  background: #f8f9fa;
 }
 .tab_home_sel:hover {
   color: #000;
@@ -278,7 +281,18 @@ a:hover{
   margin-right: 2%;
   min-height: 400px;
 }
-
+.btn_opciones{
+  width: 59%;
+  border-radius: 10px;
+  border: 1px solid #0c3f36;
+  color:#0f5132;
+  padding: 7px;
+  background: white;
+  font-size: 13px;
+  -webkit-box-shadow: 4px 7px 6px -6px #41464b;
+  -moz-box-shadow: 4px 7px 6px -6px #41464b;
+  box-shadow: 4px 7px 6px -6px #41464b;
+}
 /*Paginador*/
 .btn_paginacion{
   color: #343a40;
@@ -286,7 +300,7 @@ a:hover{
   cursor: pointer;
 }
 .paginacion_actual{
-  color:#880432;
+  color:#055160;
   background: #ffd400;
   cursor: pointer;
 }
@@ -298,13 +312,13 @@ a:hover{
   margin-bottom: 2px;
 }
 .css_sig{
-  color:#ffb21c;
+  color:#198754;
   text-shadow: 0.1px 0px #7e062f;
   margin-left: 1%;
   background: transparent;
 }
 .css_anterior{
-  color:#ffb21c;
+  color:#198754;
   text-shadow: 0.1px 0px #7e062f;
   margin-right: 1%;
   background: transparent;
@@ -389,6 +403,20 @@ a:hover{
 .color_plomo{
   color:#545658;
 }
+.buscador{
+  padding-top: 1%;
+  margin-left: 1%;
+  color: #008e76;
+  margin-bottom: 1%;
+}
+/**********Estilos pagina detalle informe**********************/
+#scroll_fotos{
+  width: 100%;
+  height: 150px;
+}
+.fotos{
+  width: 20%;
+}
 /********Estilos del pie de pagina***********/
 .fondo_pie_pagina{
   background: #0d3f36;
@@ -397,7 +425,7 @@ a:hover{
 }
 .css_linea{
   width: 100%;
-  height: 1px;
+  height: 2px;
   background: #6abb95;
 }
 .font_redes{

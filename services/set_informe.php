@@ -24,7 +24,7 @@ if( !$request_body ){
 if( isset( $informe_json->id ) ){
   $informe = ORM::for_table('informe')          
     ->where(array(
-      'id' => $informe_json->id_informe
+      'id' => $informe_json->id
   ))
     ->find_one();
 } else {
@@ -61,7 +61,9 @@ if( isset($informe_json->multa) ){
 if( isset($informe_json->id_institucion) ){
   $informe->id_institucion = $informe_json->id_institucion;
 }
-$informe->estado = $informe_json->estado;
+if( isset($informe_json->estado) ){
+  $informe->estado = $informe_json->estado;
+}
 $informe->id_usuario = $usuario->id; 
 
 ORM::get_db()->beginTransaction();

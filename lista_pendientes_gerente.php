@@ -13,18 +13,23 @@ $usuario = $_SESSION['usuario'];
 if ($usuario->rol != "gerente") {  
   die("sin_sesion");
 }
+$instituciones = ORM::for_table('institucion')->find_many();
 
+$id_institucion = 1;
+if( isset($_GET["id_institucion"]) ){
+  $id_institucion = $_GET["id_institucion"];
+}
 $pagina_actual = 0;
 if( isset($_GET["pagina_actual"]) ){
   $pagina_actual = $_GET["pagina_actual"];
 }
-$items_x_pagina = 2;
+$items_x_pagina = 5;
 
 $total_items = ORM::for_table('informe')
         ->raw_query(
         " SELECT count(id) total ".
         " FROM informe ".
-        " WHERE deleted_at IS NULL AND estado='pendiente'")
+        " WHERE deleted_at IS NULL AND estado='pendiente' AND id_institucion= $id_institucion")
          ->find_one();
 
 $total_items = $total_items->total;
@@ -33,22 +38,31 @@ $informes = ORM::for_table('informe')
         ->raw_query(
         " SELECT * ".
         " FROM informe ".
-        " WHERE deleted_at IS NULL AND estado='pendiente' ".
+        " WHERE deleted_at IS NULL AND estado='pendiente' AND id_institucion= $id_institucion ".
         " ORDER BY created_at desc ".
         " LIMIT ".($pagina_actual*$items_x_pagina).", $items_x_pagina")
         ->find_many();
 
 ?>
-<div style="padding-top: 3%"></div>
-<div class="buscador">
-  <label class="left">Buscar: </label>
-  <div class="left"><input id="texto_buscar_r" type="text" value=''/></div>
-  <img id='btn_buscar' src="img/ico_buscar.png" class="left" title="Busqueda por código, periodo"/>
+<div class="buscador row">
+  <div class="col-4">
+    <label>Institucion:</label>
+    <select id="institucion">                                                                                 
+      <?php foreach ( $instituciones as $institucion ){ ?>
+        <option value="<?=$institucion->id?>"
+          <?=isset($_GET["id_institucion"])?($institucion->id==$id_institucion?'selected':''):''?>><?=$institucion->nombre?></option>
+          <?php } ?>
+    </select>
+  </div>
+  <div class="col">
+    <label class="left">Buscar: </label>
+    <div class="left"><input id="texto_buscar_r" type="text" value=''/></div>
+    <img id='btn_buscar' src="img/ico_buscar.png" class="left" title="Busqueda por código, periodo"/>
+  </div>
 </div>
-<div class="espacio"></div>
 <?php
 if (count($informes) <= 0) {
-  echo "No hay reclamos";
+  echo "No hay informes pendientes para la institucion seleccionada";
 } else {
 ?>
 <div class="css_listado">
@@ -75,7 +89,7 @@ if (count($informes) <= 0) {
       <div class="col-lg"><?= $responsable ?></div> 
       <div class="col-lg"></div>   
       <div class="col-lg"><?= (new DateTime($informe->fecha_limite))->format("d-m-Y") ?></div>    
-      <div class="col-lg"></div>
+      <div class="col-lg"><a href="registro_informe.php?id_informe=<?=$informe->id?>" class="btn_opciones">Editar informe</a></div>
     </div>  
   <?php } ?>                              
 

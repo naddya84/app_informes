@@ -35,7 +35,7 @@ $instituciones = ORM::for_table('institucion')->find_many();
     <script src="js/libs/dropzone.js"></script>  
     <script type="text/javascript" src="js/libs/bootstrap-datetimepicker.js" charset="UTF-8"></script>
     <script type="text/javascript" src="js/libs/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
-    <script src="js/registro_informe.js?v=1"></script>
+    <script src="js/registro_informe.js?v=1.1"></script>
     
     <script type="text/javascript">
       $(document).ready(function () {        
@@ -54,7 +54,7 @@ $instituciones = ORM::for_table('institucion')->find_many();
           <div class="card bg_card">
             <div class="card-body">
               <div class="espacio"></div>
-              <div class="center"><h3 class="font_titulo">Nuevo Informe</h3></div>
+              <div class="center"><h3 class="font_titulo"><?= isset($informe_edit)?"Datos Informe":"Nuevo Informe"?></h3></div>
               <div class="espacio"></div>
               <div class="form-group">
                 <label class="font_dato">Detalle:</label>
@@ -98,7 +98,7 @@ $instituciones = ORM::for_table('institucion')->find_many();
                     <option value="">Sin Asignar</option>                                                                                  
                       <?php foreach ( $instituciones as $institucion ){ ?>
                       <option value="<?=$institucion->id?>"
-                              <?=isset($informe_edit)?($informe_edit->id==$informe_edit->id_institucion?'selected':''):''?>><?=$institucion->nombre?></option>
+                              <?=isset($informe_edit)?($informe_edit->id_institucion==$institucion->id?'selected':''):''?>><?=$institucion->nombre?></option>
                       <?php } ?>
                     </select>
                 </div>
