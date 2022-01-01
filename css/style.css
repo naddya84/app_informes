@@ -188,7 +188,7 @@ a{
   text-decoration: none;
 }
 a:hover{
-  color:#ffd400;
+  color:#6abb95;
 }
 .espacio_cabecera{
   padding-top: 3%;
@@ -216,14 +216,18 @@ a:hover{
   width: 99%;
   margin-left: 0.5%;
 }
-.css_row{
+.css_row, .css_advertencia{
   padding-top: 1%;
   padding-bottom: 1%;
-  background: #eaf7f1;
+  background: #dbe7e1;
   color: #055160;
   width: 99%;
   margin-bottom: 3px;
   margin-left: 0.5%;
+}
+.css_advertencia{
+  background: #e3aaaf;
+  color: #760505;
 }
 .left{
   float: left;
@@ -279,7 +283,7 @@ a:hover{
   width: 96%;
   margin-left: 2%;
   margin-right: 2%;
-  min-height: 400px;
+  min-height: 450px;
 }
 .btn_opciones{
   width: 59%;
@@ -338,6 +342,9 @@ a:hover{
 }
 .dropzone .dz-preview.dz-image-preview {
   background: transparent ;
+}
+.cursor{
+  cursor: pointer;
 }
 /**estilos nuevo informe***/
 .fondo_paginas{
@@ -403,6 +410,9 @@ a:hover{
 .color_plomo{
   color:#545658;
 }
+.color_verde{
+  color:#278972;
+}
 .buscador{
   padding-top: 1%;
   margin-left: 1%;
@@ -416,6 +426,16 @@ a:hover{
 }
 .fotos{
   width: 20%;
+}
+/************Estilos pagina reportes**************/
+.contenedor_reportes{
+  width: 80%;
+  padding-top: 2%;
+  margin-left: 4%;
+}
+.contenedor_datos_reporte{
+  margin-left: 5%;
+  margin-right: 5%;
 }
 /********Estilos del pie de pagina***********/
 .fondo_pie_pagina{

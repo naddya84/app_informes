@@ -19,6 +19,12 @@ $id_institucion = 1;
 if( isset($_GET["id_institucion"]) ){
   $id_institucion = $_GET["id_institucion"];
 }
+$texto="";
+$where_texto = "";
+if( isset( $_GET['texto_buscar'] ) ){
+  $texto = $_GET['texto_buscar']; 
+  $where_texto = " AND ( LOWER(codigo) LIKE LOWER('%$texto%') OR LOWER(detalle) LIKE LOWER('%$texto%') ) ";
+}
 $pagina_actual = 0;
 if( isset($_GET["pagina_actual"]) ){
   $pagina_actual = $_GET["pagina_actual"];
@@ -29,7 +35,7 @@ $total_items = ORM::for_table('informe')
         ->raw_query(
         " SELECT count(id) total ".
         " FROM informe ".
-        " WHERE deleted_at IS NULL AND estado='finalizado' AND id_institucion= $id_institucion")
+        " WHERE deleted_at IS NULL AND estado='finalizado' AND id_institucion= $id_institucion $where_texto")
          ->find_one();
 
 $total_items = $total_items->total;
@@ -39,6 +45,7 @@ $informes = ORM::for_table('informe')
         " SELECT * ".
         " FROM informe ".
         " WHERE deleted_at IS NULL AND estado='finalizado' AND id_institucion= $id_institucion ".
+        $where_texto.
         " ORDER BY created_at desc ".
         " LIMIT ".($pagina_actual*$items_x_pagina).", $items_x_pagina")
         ->find_many();
@@ -56,10 +63,11 @@ $informes = ORM::for_table('informe')
   </div>
   <div class="col">
     <label class="left">Buscar: </label>
-    <div class="left"><input id="texto_buscar_r" type="text" value=''/></div>
-    <img id='btn_buscar' src="img/ico_buscar.png" class="left" title="Busqueda por código, periodo"/>
+    <div class="left"><input id="texto_buscar_r" type="text" value="<?=isset( $_GET['texto_buscar'] )?$_GET['texto_buscar']:''?>"/></div>
+    <div id="btn_buscar" class="cursor"><img src="img/ico_buscar.png" title="Busqueda por código, periodo"/></div>
   </div>
 </div>
+<div class="espacio"></div>
 <?php
 if (count($informes) <= 0) {
   echo "No hay informes finalizados";

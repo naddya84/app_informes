@@ -1,5 +1,5 @@
 var pagina_actual = 0;  
-var busqueda = "";  
+var busqueda = "";
 
 function iniciar(lista){
   //set_actividad( {actividad:"Home Gerente"} );   
@@ -43,7 +43,21 @@ function cargar_pendientes(){
           pagina_actual = $(this).data("pagina")
           cargar_pendientes();
       });            
-          
+      $("#btn_buscar").click( function () { 
+        busqueda = "&buscar_texto="+$("#buscar_texto").val()+"&id_institucion="+$("#institucion").val();            
+        cargar_pendientes();
+      });
+      $('.btn_paginacion').click( function (){   
+          $("#div_cargando").fadeIn();
+          pagina_actual = $(this).data("pagina");
+          busqueda = "&buscar_texto="+$("#texto_buscar").val()+"&id_institucion="+$("#institucion").val();            
+          cargar_pendientes();
+      });  
+       
+      $("#institucion").change( function () {    
+        busqueda = "&id_institucion="+$("#institucion").val();            
+        cargar_pendientes();
+      });
       $("#div_cargando").fadeOut();      
     } else {
       //No tiene sesion mandamos al inicio
@@ -74,14 +88,20 @@ function cargar_finalizados(){
       $("#div_contenido").html(response);      
       //Botones paginacion
       $('.btn_paginacion').click( function (){   
-          $("#div_cargando").fadeIn();
-          pagina_actual = $(this).data("pagina")
-          cargar_finalizados();
+        $("#div_cargando").fadeIn();
+        pagina_actual = $(this).data("pagina")
+        busqueda = "&buscar_texto="+$("#texto_buscar_r").val()+"&id_institucion="+$("#institucion").val();
+        cargar_finalizados();
       });            
       
+      $("#institucion").change( function () {    
+        busqueda = "&id_institucion="+$("#institucion").val();            
+        cargar_finalizados();
+      });
       //Busquedas y orden
-      $("#btn_buscar").click( function () {                
-        window.location.href = "home_gerente.php?lista=finalizados&texto_buscar="+$("#texto_buscar_r").val();
+      $("#btn_buscar").click( function () {    
+        busqueda = "&texto_buscar="+$("#texto_buscar_r").val()+"&id_institucion="+$("#institucion").val();
+        cargar_finalizados();
       });
             
       $("#div_cargando").fadeOut();      
