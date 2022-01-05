@@ -12,6 +12,10 @@ $lista = "pendiente";
 if( isset( $_GET['lista'] ) ){
   $lista = $_GET['lista'];
 }
+$alerta = "";
+if(isset( $_GET['alerta'])){
+  $alerta = $_GET['alerta'];
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -39,17 +43,26 @@ if( isset( $_GET['lista'] ) ){
       <div class="css_linea"></div>
       <div class="fondo_central">
         <div class="espacio"></div>
-        
-          <div class="row tm_opciones">                
-            <div id="tab_pendientes" class="col tab_home">PENDIENTES</div>   
-            <div id="tab_finalizados" class="col tab_home">FINALIZADOS</div>   
-          </div>
-          <div class="fondo_tab">
-            <div id="div_contenido"> </div>  
-          </div>
-         <div class="espacio"></div>
+        <div class="alertas cursor" id="abrir_alertas"><img src="img/ico_alerta.png" class="css_alerta"> Alertas</div>
+        <div class="row tm_opciones">                
+          <div id="tab_pendientes" class="col tab_home">PENDIENTES</div>   
+          <div id="tab_finalizados" class="col tab_home">FINALIZADOS</div>   
+        </div>
+        <div class="fondo_tab">
+          <div id="div_contenido"> </div>  
+        </div>
+        <div id="div_alerta">
+        </div>
+        <div class="espacio"></div>
       </div>
     </div>
+    <?php  
+    if($alerta != ""){
+      include 'pop_alerta.php';
+    } ?>
     <?php include 'pie_pagina.php'; ?>
+    <div id="div_cargando" class="fondo_block">
+      <img src="img/cargando.gif" class="img_cargando">
+    </div>
   </body>
 </html>

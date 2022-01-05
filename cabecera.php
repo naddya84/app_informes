@@ -12,28 +12,30 @@
       <div class="col css_datos_usuario">
         <div class="texto_usuario"><?= $usuario->fullname ?></div>
         <span class="texto_rol"><?=nombre_rol($usuario->rol)?></span>
-      </div>
+      </div>  
     </div>
   </div>
- 
+
 <input id="rol" type="hidden" value="<?= $usuario->rol ?>" />
 
 <?php if (strcmp($usuario->rol, "jefe") == 0) { ?>
 
   <div class="contenedor_menu" id="menu_jefe">
-    <a class="css_inicio left" href="reporte_alertas.php">ALERTAS</a>
+    <a class="css_inicio left" href="reporte_alertas.php">NOTIFICACIÓN</a>
     <a class="css_inicio left" href="home_<?= $usuario->rol ?>.php" >HOME</a>  
     <a class="css_inicio left" href="nuevo_informe.php">NUEVO INFORME</a>
     <a class="css_inicio left" href="reportes.php">REPORTES</a>
+    <a class="css_inicio left" href="cerrar_sesion.php">SALIR</a>
   </div>  
 <?php } ?>
  
 <?php if (strcmp($usuario->rol, "gerente") == 0) { ?>
   <div class="contenedor_menu" id="menu_gerente">
-    <a class="css_inicio left" href="reporte_alertas.php">ALERTAS</a>
     <a class="css_inicio left" href="home_<?= $usuario->rol ?>.php" >HOME</a>  
     <a class="css_inicio left" href="registro_informe.php">NUEVO INFORME</a>
     <a class="css_inicio left" href="reportes.php">REPORTES</a>
+    <a class="css_inicio left" href="reporte_alertas.php">NOTIFICACIÓN</a>
+    <a class="css_inicio left" href="cerrar_sesion.php">SALIR</a>
   </div>
 </div>      
 <?php } ?> 

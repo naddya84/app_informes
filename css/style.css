@@ -115,7 +115,7 @@ body {
 .content-popup {
   padding:20px;
 }
-.popup-overlay {
+.popup-overlay, .overlay_alerta {
   position: fixed;
   top: 0px;
   left: 0px;
@@ -142,7 +142,24 @@ body {
   width: 98%;
   color: #000;
 }
-
+.popup_alerta {
+  position: fixed;
+  top: 17%;
+  background: #dee2e6;
+  border-radius: 8px;
+  display: block;
+  border-radius: 6px;
+  width: 550px;
+  min-height: 390px;
+  z-index: 1001;
+}
+.content-popup_alerta {
+  padding-top: 20px;
+  margin-bottom: 20px;
+}
+.overlay_alerta {
+  display: block;
+}
 /***estilos del home***/
 .cabecera{
   background: linear-gradient(to right,#008e76 100px,#0c3f36 700px);
@@ -236,16 +253,20 @@ a:hover{
   float: right;
 }
 .cerrar_sesion{
-  position: absolute;
-  top: 1%;
-  right: 1%;
-  color: #7b052e;
+  margin-top: 1%;
+  color: #c1c609;
   font-size: 14px;
+  margin-left: 4%;
 }
-
+.img_cabecera{
+  position: absolute;
+}
 .container-fluid {
   padding-right: 0px; 
   padding-left:  0px; 
+}
+.btn_detalle{
+  color: #f3c53a;
 }
 /****Estilos pestañas home****/
 .tm_opciones{
@@ -265,7 +286,7 @@ a:hover{
   min-width: 90px;
   cursor: pointer;
   text-align: center;
-  box-shadow: 0 0px 0px 0px rgb(0 0 0 / 2%), 4px 0px 11px 0 rgb(0 0 0 / 13%);
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 10%), 0 6px 20px 0 rgba(0, 0, 0, 1%);
 }
 .tab_home:hover{
   color: black;
@@ -296,6 +317,51 @@ a:hover{
   -webkit-box-shadow: 4px 7px 6px -6px #41464b;
   -moz-box-shadow: 4px 7px 6px -6px #41464b;
   box-shadow: 4px 7px 6px -6px #41464b;
+}
+.img_alerta{
+  margin-top: -8%;
+}
+.alerta_roja, .alerta_lila, .alerta_naranja{
+  width: 98%;
+  margin-bottom: 6px;
+  margin-left: -2%;
+  background: #d7061a;
+  color: #edd1d4;
+  border-top-left-radius: 21px;
+  border-bottom-right-radius: 21px;
+  font-size: 12px;
+  box-shadow: 2px -1px 3px 0px #979091; 
+  transition: margin-left 2s;
+}
+.alerta_lila{
+  box-shadow: 2px -1px 3px 0px #bc83e7;
+  background: #924dc7;
+  color: #d8ace3;
+}
+.alerta_naranja{
+  box-shadow: 2px -1px 3px 0px #c17036;
+  background: #dfa651;
+  color: #b53302;
+}
+.texto_alerta{
+  margin-left: 4%;
+  padding-top: 1.5%;
+}
+.texto_tiempo{
+  margin-left: 4%;
+  margin-bottom: 1%;
+}
+.alerta_roja:hover {
+  margin-left: 3px;
+}
+.css_alerta{
+  width: 28px;
+}
+.alertas{
+  position: absolute;
+  right: 3%;
+  top: 15%;
+  color:#278972;
 }
 /*Paginador*/
 .btn_paginacion{

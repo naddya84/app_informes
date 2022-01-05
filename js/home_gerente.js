@@ -19,6 +19,15 @@ function iniciar(lista){
     pagina_actual = 0;
     cargar_finalizados();
   }); 
+  
+  $(".overlay_alerta").click( function (){ 
+    $("#mensaje").fadeOut();
+    $("#fondo_pop").fadeOut();
+  });
+  
+  $("#abrir_alertas").click( function (){ 
+    cargar_alertas();
+  });
 }
 
 function cargar_pendientes(){ 
@@ -37,12 +46,7 @@ function cargar_pendientes(){
             
     if( response != "sin_sesion" ){
       $("#div_contenido").html(response);      
-      //Botones paginacion
-      $('.btn_paginacion').click( function (){   
-          $("#div_cargando").fadeIn();
-          pagina_actual = $(this).data("pagina")
-          cargar_pendientes();
-      });            
+               
       $("#btn_buscar").click( function () { 
         busqueda = "&buscar_texto="+$("#buscar_texto").val()+"&id_institucion="+$("#institucion").val();            
         cargar_pendientes();
@@ -113,6 +117,31 @@ function cargar_finalizados(){
   .catch( function(error){        
     console.error(error);        
     mostrar_alerta("No se pudo acceder a la lista de informes finalizados");
+  });
+}
+function cargar_alertas(){ 
+  fetch('pop_alerta.php',  {
+    method: 'GET',
+    credentials: 'same-origin',    
+    mode: 'no-cors',
+    headers:{
+      'Content-Type': 'text/html'
+    }
+  })      
+  .then((res) => {return res.text();})
+  .then(function(response) {  
+    $("#div_alerta").html(response);      
+    $("#div_cargando").fadeOut();
+    
+    $(".overlay_alerta").click( function (){ 
+      $("#mensaje").fadeOut();
+      $("#fondo_pop").fadeOut();
+    });
+  
+  })
+  .catch( function(error){        
+    console.error(error);        
+    mostrar_alerta("No se pudo acceder a las alertas");
   });
 }
 

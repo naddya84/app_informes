@@ -37,7 +37,7 @@ function validar_datos() {
         return false;
     }
     if ($.trim($("#clave").val()) === '') {
-        $('#texto_mensaje').html("Ingresa tu clave, por favor"); console.log("entrooooo ");
+        $('#texto_mensaje').html("Ingresa tu clave, por favor"); 
         $('#mensaje_form').fadeIn('slow');
         $('#fondo_pop').fadeIn();
         $("#div_cargando").fadeOut();
@@ -68,7 +68,7 @@ function ingresar_sistema(){
     })
     .then(function(response) {            
       if( response.success ){
-        window.location.href = "home_"+response.rol+".php"        
+        window.location.href = "home_"+response.rol+".php?alerta=mostrar_alerta"        
       } else {               
         $("#div_cargando").fadeOut();
         if( response.reason ){
