@@ -27,7 +27,7 @@ $institucion = ORM::for_table('institucion')->where("id","id_institucion")->find
     
     <script src="js/libs/jquery-3.3.1.min.js"></script>
     <script src="js/libs/jquery-ui.js"></script>        
-    <script src="bootstrap/js/bootstrap.min.js"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script> 
     <script src="js/libs/jquery.mCustomScrollbar.concat.min.js"></script>
     <script src="js/detalle_informe.js"></script>
     
@@ -97,14 +97,11 @@ $institucion = ORM::for_table('institucion')->where("id","id_institucion")->find
               <?php 
               $fotos_informe = ORM::for_table('documentos_informe')->where("id_informe",$informe->id)->find_many();
               if($fotos_informe != null){   ?>
-              <div class="espacio"></div>
                 <div class="color_plomo">Fotos del Informe</div>
-                <div class="contenedor_doc">
-                  <div id="scroll_fotos">
-                    <?php foreach ($fotos_informe as $foto){ ?>
-                      <a href="<?= $foto->url?>" target="_blank"><img src = "<?='uploads/'.$informe->id.'/'.$foto->url?>" class="fotos"></a>
-                    <?php } ?>
-                  </div>
+                <div id="scroll_fotos">
+                  <?php foreach ($fotos_informe as $foto){ ?>
+                    <a href="<?= $foto->url?>" target="_blank"><img src = "<?='uploads/'.$informe->id.'/'.$foto->url?>" class="fotos"></a>
+                  <?php } ?>
                 </div>
                 <?php } ?>
               <div class="espacio"></div>

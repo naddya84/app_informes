@@ -1,11 +1,21 @@
 <?php
 require_once 'config/database.php';
 
+if(isset($_GET['session'])){
+session_name("LoyolaReportes");
+session_start();
+
+if (!isset($_SESSION['usuario'])) {  
+  die("sin_sesion");
+}
+
+$usuario = $_SESSION['usuario'];
+}
 $informes = ORM::for_table('informe')
         ->raw_query(
         " SELECT * ".
         " FROM informe ".
-        " WHERE deleted_at IS NULL AND estado='pendiente'")
+        " WHERE deleted_at IS NULL AND estado='pendiente' AND id_usuario= $usuario->id")
         ->find_many();
 ?>
 <!--pop up alertas -->
@@ -14,15 +24,14 @@ $informes = ORM::for_table('informe')
   <div id="mensaje" class="popup_alerta">
     <div class="center"><img src="img/ico_alerta.png" class="img_alerta"></div>
     <div class="content-popup_alerta">
-    <?php foreach ($informes as $informe) { 
-      $usuario = ORM::for_table('usuario')->where("id", $informe->id_usuario)->find_one();
-      $responsable = $usuario->fullname;
-         
-      $limite = new DateTime($informe->fecha_limite);
-      $d1= new DateTime(); 
-      $d2= $limite;
+    <?php 
+    if(count($informes) > 0){ 
+      foreach ($informes as $informe) { 
+        $limite = new DateTime($informe->fecha_limite);
+        $d1= new DateTime(); 
+        $d2= $limite;
 
-      $dias = $horas = $minutos = "";
+        $dias = $horas = $minutos = "";
       if( $d1 < $d2 ){ 
         $interval= $d1->diff($d2);    
         if( $interval->days > 0 ){
@@ -65,7 +74,10 @@ $informes = ORM::for_table('informe')
         </div>
       </div>
       <?php } 
-    }?>
+      }
+    } else{ echo "entro";?>
+      <div id="texto_mensaje">En este momento no existen alertas de informes pendientes</div>
+    <?php }?>
     </div>
   </div>
 </div>

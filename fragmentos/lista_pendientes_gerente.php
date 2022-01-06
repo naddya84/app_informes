@@ -1,5 +1,5 @@
 <?php
-require_once 'config/database.php';
+require_once '../config/database.php';
 
 session_name("LoyolaReportes");
 session_start();
@@ -125,6 +125,6 @@ if (count($informes) <= 0) {
 <div class="espacio"></div>
 <?php } ?>
 </div>
-<?php include("paginacion.php"); ?>          
+<?php include("../paginacion.php"); ?>          
 
  

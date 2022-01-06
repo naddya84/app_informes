@@ -48,6 +48,7 @@ $instituciones = ORM::for_table('institucion')->find_many();
     <div class="container-fluid">
       <?php include 'cabecera.php'; ?>
       <input type="hidden" id="id_informe" value="<?=$informe_edit->id?>">
+      <input type="hidden" id="rol_usuario" value="<?=$usuario->rol?>">
       <div class="fondo_paginas">
         <div class="espacio"></div>
           <div class="container">
@@ -137,23 +138,25 @@ $instituciones = ORM::for_table('institucion')->find_many();
               </div>
               <div class="espacio"></div>
               <?php 
-              $fotos_informe = ORM::for_table('documentos_informe')->find_many();
-              if(isset($informe_edit) && $fotos_informe != null){   ?>
-                  <div class="contenedor_doc">
-                    <?php foreach($fotos_informe as $fotos){ ?>
-                    <input type="hidden" id="documento" value="<?=$fotos->url?>">
-                    <img src="img/ico_eliminar.png" class="cursor" id="btn_eliminar_documento">
-                    <a href="<?='uploads/'.$informe_edit->id.'/'.$fotos->url?>" target="_blank"><img src="<?='uploads/'.$informe_edit->id.'/'.$fotos->url?>" class="fotos_informe"></a>
-                    <?php } ?>
-                  </div>
-                  <?php } ?>
+              if(isset($informe_edit)){   
+                $fotos_informe = ORM::for_table('documentos_informe')->where('id_informe',$informe_edit->id)->find_many();
+                if($fotos_informe != null){?>
+                <div class="contenedor_doc">
+                <?php foreach($fotos_informe as $fotos){ ?>
+                  <input type="hidden" id="documento" value="<?=$fotos->url?>">
+                  <img src="img/ico_eliminar.png" class="cursor" id="btn_eliminar_documento">
+                  <a href="<?='uploads/'.$informe_edit->id.'/'.$fotos->url?>" target="_blank"><img src="<?='uploads/'.$informe_edit->id.'/'.$fotos->url?>" class="fotos_informe"></a>
+                <?php } ?>
+                </div>
+               <?php }
+               }?>
               <div>
                 <label class="color_plomo">Fotos del Informe</label>
                 <form action="services/photoupload.php" class="dropzone" id="my-dropzone" method="POST"></form>
               </div>
               <div class="espacio"></div>
               <div class="center">
-                <div id="btn_guardar" class="css_btn">GUARDAR</div>
+                <div id="btn_guardar" class="btn css_btn">GUARDAR</div>
                 <div id="btn_finalizar" class="btn css_btn" style="margin-left: 3%;margin-right: 3%">FINALIZAR</div>
                 <a " href="javascript:history.back()" class="btn css_btn">VOLVER</a>
               </div>

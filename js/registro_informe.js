@@ -3,12 +3,12 @@ var fotos_informe = [];
 Dropzone.options.myDropzone = {
   paramName: "file", // The name that will be used to transfer the file
   maxFilesize: 20, // MB
-  maxFiles: 1,
+  maxFiles: 20,
   acceptedFiles: "image/*",
   forceChunking: true,
   resizeQuality: 1,
   resizeWidth: 1500,
-  dictDefaultMessage: "<center><div class='left margen_sms_dropzone'>Sube la foto de tu firma</div><img src='img/ico_subir_foto_doc.png' class='left'></center><br>",
+  dictDefaultMessage: "<center><div class='left margen_sms_dropzone'>Sube las fotos del informe</div><img src='img/ico_subir_foto_doc.png' class='left'></center><br>",
   dictFallbackMessage: "Tu navegador no soporta la subida de archivos",
   dictFileTooBig: "El archivo que intentas subir pesa mucho {{filesize}}, límite {{maxFilesize}} ",
   dictInvalidFileType: "Solo se puede subir una imágen",
@@ -89,10 +89,10 @@ function validar_datos(){
       mostrar_alerta("Debe seleccionar una opción de la sección tipo de envio");        
       return false;
   }
-  if ($.trim($("#sistema_modulo").val()) === '') {
+  /*if ($.trim($("#sistema_modulo").val()) === '') {
       mostrar_alerta("Ingresa el nombre del sistema o modulo, por favor");
       return false;
-  }
+  }*/
   if (!$("input[name='multa']:checked").val()) {  
       mostrar_alerta("En multa, debe seleccionar una opción");        
       return false;
@@ -135,7 +135,7 @@ function registrar_informe(estado){
   };
   if($("#id_informe").val() > 0){  
     data.id = $("#id_informe").val();
-  }
+  } 
   fetch('services/set_informe.php',  {
     method: 'POST',
     credentials: 'same-origin',
@@ -144,8 +144,8 @@ function registrar_informe(estado){
   })
   .then(function(response) {return response.json();})
   .then(function(response) {                  
-    if( response.success ){  
-       window.location.href = "home_gerente.php";  
+    if( response.success ){
+      window.location.href = "home_"+$("#rol_usuario").val()+".php";  
     } else {                       
       $("#div_cargando").fadeOut();
       mostrar_alerta(response.reason);

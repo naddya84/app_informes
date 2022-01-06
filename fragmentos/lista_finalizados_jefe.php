@@ -1,5 +1,5 @@
 <?php
-require_once 'config/database.php';
+require_once '../config/database.php';
 
 session_name("LoyolaReportes");
 session_start();
@@ -10,7 +10,7 @@ if (!isset($_SESSION['usuario'])) {
 
 $usuario = $_SESSION['usuario'];
 
-if ($usuario->rol != "gerente") {  
+if ($usuario->rol != "jefe") {  
   die("sin_sesion");
 }
 $instituciones = ORM::for_table('institucion')->find_many();
@@ -35,7 +35,8 @@ $total_items = ORM::for_table('informe')
         ->raw_query(
         " SELECT count(id) total ".
         " FROM informe ".
-        " WHERE deleted_at IS NULL AND estado='finalizado' AND id_institucion= $id_institucion $where_texto")
+        " WHERE deleted_at IS NULL AND estado='finalizado' AND id_institucion= $id_institucion $where_texto".
+        " AND id_usuario= $usuario->id")
          ->find_one();
 
 $total_items = $total_items->total;
@@ -46,6 +47,7 @@ $informes = ORM::for_table('informe')
         " FROM informe ".
         " WHERE deleted_at IS NULL AND estado='finalizado' AND id_institucion= $id_institucion ".
         $where_texto.
+        " AND id_usuario= $usuario->id".
         " ORDER BY created_at desc ".
         " LIMIT ".($pagina_actual*$items_x_pagina).", $items_x_pagina")
         ->find_many();
@@ -78,7 +80,6 @@ if (count($informes) <= 0) {
     <div class="col-lg">Nro.</div>     
     <div class="col-lg">Codigo</div>     
     <div class="col-lg">Detalle</div>
-    <div class="col-lg">Responsable</div>  
     <div class="col-lg">Fecha Límite</div>
     <div class="col-lg">Acciones</div>
   </div>
@@ -93,7 +94,6 @@ if (count($informes) <= 0) {
       <div class="col-lg"><?= $index ++ ?></div>
       <div class="col-lg"><?= $informe->codigo ?></div>      
       <div class="col-lg"><?= $informe->detalle ?></div> 
-      <div class="col-lg"><?= $responsable ?></div> 
       <div class="col-lg"><?= (new DateTime($informe->fecha_limite))->format("d-m-Y") ?></div>    
       <div class="col-lg"><a href="detalle_informe.php?id_informe=<?=$informe->id?>" class="btn_opciones">Ver Detalle</a></div>
     </div>  
@@ -102,4 +102,4 @@ if (count($informes) <= 0) {
 <div class="espacio"></div>
 <?php } ?>
 </div>
-<?php include("paginacion.php"); ?>          
+<?php include("../paginacion.php"); ?>       

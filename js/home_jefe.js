@@ -2,7 +2,7 @@ var pagina_actual = 0;
 var busqueda = "";
 
 function iniciar(lista){
-  //set_actividad( {actividad:"Home Gerente"} );   
+  //set_actividad( {actividad:"Home Jefe"} );   
   if( lista == "finalizada"){
     cargar_finalizados();
   } else{
@@ -31,7 +31,7 @@ function iniciar(lista){
 }
 
 function cargar_pendientes(){ 
-  fetch('fragmentos/lista_pendientes_gerente.php?pagina_actual='+pagina_actual+busqueda,  {
+  fetch('fragmentos/lista_pendientes_jefe.php?pagina_actual='+pagina_actual+busqueda,  {
     method: 'GET',
     credentials: 'same-origin',    
     mode: 'no-cors',
@@ -75,7 +75,7 @@ function cargar_pendientes(){
 }
 
 function cargar_finalizados(){ 
-  fetch('fragmentos/lista_finalizados_gerente.php?pagina_actual='+pagina_actual+busqueda,  {
+  fetch('fragmentos/lista_finalizados_jefe.php?pagina_actual='+pagina_actual+busqueda,  {
     method: 'GET',
     credentials: 'same-origin',    
     mode: 'no-cors',
@@ -144,4 +144,6 @@ function cargar_alertas(){
     mostrar_alerta("No se pudo acceder a las alertas");
   });
 }
+
+
 
