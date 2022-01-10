@@ -11,11 +11,17 @@ if (!isset($_SESSION['usuario'])) {
 
 $usuario = $_SESSION['usuario'];
 }
+$final = new DateTime();  
+$final->modify("+ 25 day");  
+$fecha_final = $final->format("Y-m-d");  
+$fecha_inicial = date('Y-m-d', time()); 
+
 $informes = ORM::for_table('informe')
         ->raw_query(
         " SELECT * ".
         " FROM informe ".
-        " WHERE deleted_at IS NULL AND estado='pendiente' AND id_usuario= $usuario->id")
+        " WHERE deleted_at IS NULL AND estado='pendiente' AND id_usuario= $usuario->id".
+        " AND fecha_limite between '$fecha_inicial' AND '$fecha_final 23:59:59' ")
         ->find_many();
 ?>
 <!--pop up alertas -->
@@ -47,7 +53,7 @@ $informes = ORM::for_table('informe')
       } else {
         $tiempo_restante = "Fuera de Tiempo";
       }
-      if($dias > 0 && $dias < 5){ ?>
+      if($dias > 0 && $dias < 26){ ?>
       <div class="alerta_lila">
         <div class="texto_alerta"><?=$informe->detalle?></div>
         <div class="row">
@@ -75,7 +81,7 @@ $informes = ORM::for_table('informe')
       </div>
       <?php } 
       }
-    } else{ echo "entro";?>
+    } else{ ?>
       <div id="texto_mensaje">En este momento no existen alertas de informes pendientes</div>
     <?php }?>
     </div>

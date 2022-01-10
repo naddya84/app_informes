@@ -29,7 +29,7 @@ $institucion = ORM::for_table('institucion')->where("id","id_institucion")->find
     <script src="js/libs/jquery-ui.js"></script>        
     <script src="bootstrap/js/bootstrap.min.js"></script> 
     <script src="js/libs/jquery.mCustomScrollbar.concat.min.js"></script>
-    <script src="js/detalle_informe.js"></script>
+    <script src="js/detalle_informe.js?v=1.1"></script>
     
     <script type="text/javascript">
       $(document).ready(function () {        
@@ -41,6 +41,7 @@ $institucion = ORM::for_table('institucion')->where("id","id_institucion")->find
   <body>
     <div class="container-fluid">
       <?php include 'cabecera.php'; ?>
+      <input type="hidden" id="rol_usuario" value="<?=$usuario->rol?>">
       <div class="fondo_paginas">
         <div class="espacio"></div>
           <div class="container">
@@ -58,7 +59,7 @@ $institucion = ORM::for_table('institucion')->where("id","id_institucion")->find
                   <label class="font_dato">Código:</label></label><span><?=$informe->codigo?></span>
                 </div>
                 <div class="col-6">
-                  <label class="font_dato">Periodo:</label></label><span><?=$informe->	tipo_periodo?></span>
+                  <label class="font_dato">Periodo:</label></label><span><?=$informe->tipo_periodo?></span>
                 </div>
               </div>
               <div class="espacio"></div>
@@ -93,24 +94,29 @@ $institucion = ORM::for_table('institucion')->where("id","id_institucion")->find
                 <div class="col-6">
                   <label class="font_datos">Fecha limite: </label></label><span><?=$informe->fecha_limite?></span>
               </div>
-              <div class="espacio"></div>
-              <?php 
-              $fotos_informe = ORM::for_table('documentos_informe')->where("id_informe",$informe->id)->find_many();
-              if($fotos_informe != null){   ?>
-                <div class="color_plomo">Fotos del Informe</div>
-                <div id="scroll_fotos">
-                  <?php foreach ($fotos_informe as $foto){ ?>
-                    <a href="<?= $foto->url?>" target="_blank"><img src = "<?='uploads/'.$informe->id.'/'.$foto->url?>" class="fotos"></a>
-                  <?php } ?>
-                </div>
-                <?php } ?>
-              <div class="espacio"></div>
-              <div class="center">
-              <a " href="javascript:history.back()" id="btn_volver" class="css_btn">Volver</a>
               </div>
             </div>
           </div>
+          <div class="espacio"></div>
+          <?php 
+          $fotos_informe = ORM::for_table('documentos_informe')->where("id_informe",$informe->id)->find_many();
+          if($fotos_informe != null){   ?>
+          <div class="card">
+            <div class="card-body">
+              <div class="color_plomo">Fotos del Informe</div>
+              <div id="scroll_fotos">
+              <?php foreach ($fotos_informe as $foto){ ?>
+                <a href="<?= $foto->url?>" target="_blank"><img src = "<?='uploads/'.$informe->id.'/'.$foto->url?>" class="fotos"></a>
+              <?php } ?>
+              </div>
+            </div>
+            <?php } ?>
+          </div>
         </div>
+        <div class="espacio"></div>
+        <div class="center">
+          <div id="btn_volver" class="css_btn">Volver</div>
+        </div>    
         <br>
       </div>
     </div>

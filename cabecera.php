@@ -10,7 +10,7 @@
         <?php } ?>
       </div>
       <div class="col css_datos_usuario">
-        <div class="texto_usuario"><?= $usuario->fullname ?></div>
+        <div class="texto_usuario"><a href="lista_notificaciones.php" class="texto_rol"><?= $usuario->fullname ?></a></div>
         <span class="texto_rol"><?=nombre_rol($usuario->rol)?></span>
       </div>  
     </div>
@@ -24,7 +24,7 @@
     <a class="css_inicio left" href="home_<?= $usuario->rol ?>.php" >HOME</a>  
     <a class="css_inicio left" href="registro_informe.php">NUEVO INFORME</a>
     <a class="css_inicio left" href="reportes.php">REPORTES</a>
-    <a class="css_inicio left" href="reporte_alertas.php">NOTIFICACIÓN</a>
+    <a class="css_inicio left" href="notificaciones.php">NOTIFICACIÓN</a>
     <a class="css_inicio left" href="cerrar_sesion.php">SALIR</a>
   </div>  
 <?php } ?>
@@ -34,7 +34,7 @@
     <a class="css_inicio left" href="home_<?= $usuario->rol ?>.php" >HOME</a>  
     <a class="css_inicio left" href="registro_informe.php">NUEVO INFORME</a>
     <a class="css_inicio left" href="reportes.php">REPORTES</a>
-    <a class="css_inicio left" href="reporte_alertas.php">NOTIFICACIÓN</a>
+    <a class="css_inicio left" href="notificaciones.php">NOTIFICACIÓN</a>
     <a class="css_inicio left" href="cerrar_sesion.php">SALIR</a>
   </div>      
 <?php } ?> 

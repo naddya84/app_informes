@@ -4,6 +4,7 @@ require_once '../config/database.php';
 session_name("LoyolaReportes");
 session_start();
 
+require_once 'send_notification_disp.php';
 
 if( !isset($_SESSION['usuario']) ){
   die ( json_encode(array(
@@ -63,13 +64,79 @@ if( isset($informe_json->id_institucion) ){
 }
 if( isset($informe_json->estado) ){
   $informe->estado = $informe_json->estado;
-}
+}    
 $informe->id_usuario = $usuario->id; 
 
 ORM::get_db()->beginTransaction();
 
 if( $informe->save() ){ 
-     
+  
+  if( strcmp($informe_json->estado, "pendiente" ) == 0 ){
+    //Alerta gerente
+    if( $usuario->rol == "jefe" ){
+      $gerentes= ORM::for_table('usuario')->where('rol', 'gerente')->find_many();
+      foreach($gerentes as $gerente){
+        $alerta = ORM::for_table('alerta')->create();
+        $alerta->descripcion = "Informe: ".$informe->detalle." Porcentaje de Avance: ".$informe->avance."%";
+        $alerta->url = "detalle_informe.php?id_informe=".$informe->id();
+        $alerta->id_usuario_alerta = $gerente->id;
+        $alerta->id_usuario = $usuario->id;
+
+        if( !$alerta->save() ){  
+          ORM::get_db()->rollBack();    
+          echo json_encode(array(
+              "success" => false,      
+              "reason" => "No se pudo guardar la alerta del informe"
+          ));  
+          die();
+        }          
+
+        $res_notif = send_notificacion_disps($gerente->id, "Nuevo Informe", "Detalle : ".$informe->detalle);
+
+        $actividad = ORM::for_table('actividad')->create();
+
+        $actividad->id_usuario = $usuario->id;
+        $actividad->actividad = "Notificacion Gerente";
+        $actividad->actividad_json = $res_notif;
+        $actividad->remote_ip = $_SERVER['REMOTE_ADDR'];
+        $actividad->save();    
+      }
+    }
+  }
+  
+  if( strcmp($informe_json->estado, "finalizado" ) == 0 ){
+    //Alerta gerente
+    if( $usuario->rol == "jefe" ){
+      $gerentes= ORM::for_table('usuario')->where('rol', 'gerente')->find_many();
+      foreach($gerentes as $gerente){
+        $alerta = ORM::for_table('alerta')->create();
+        $alerta->descripcion = "Se creo el informe: ".$informe->detalle." Porcentaje de Avance: ".$informe->avance."%";
+        $alerta->url = "detalle_informe.php?id_informe=".$informe->id();
+        $alerta->id_usuario_alerta = $gerente->id;
+        $alerta->id_usuario = $usuario->id;
+
+        if( !$alerta->save() ){  
+          ORM::get_db()->rollBack();    
+          echo json_encode(array(
+              "success" => false,      
+              "reason" => "No se pudo guardar la alerta del informe"
+          ));  
+          die();
+        }          
+
+        $res_notif = send_notificacion_disps($gerente->id, "Nuevo Informe", "Detalle : ".$informe->detalle);
+
+        $actividad = ORM::for_table('actividad')->create();
+
+        $actividad->id_usuario = $usuario->id;
+        $actividad->actividad = "Notificacion Gerente";
+        $actividad->actividad_json = $res_notif;
+        $actividad->remote_ip = $_SERVER['REMOTE_ADDR'];
+        $actividad->save();    
+      }
+    }
+  }
+  
   $ds = "/";  
   $tempStoreFolder = '../uploads'.$ds.session_id().$ds;
   $storeFolder = '../uploads'.$ds.$informe->id().$ds;
