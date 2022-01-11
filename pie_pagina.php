@@ -11,7 +11,7 @@
   </div>-->
   <div class="font_derechos_empresa center">
     <img src="img/logo_bn.png" class="left">
-    <label>COOPERATIVA DE AHORRO Y CREDITO ABIERTA LOYOLA R.L.  ©2121 Powered by WKX</label>
+    <label>COOPERATIVA DE AHORRO Y CREDITO ABIERTA LOYOLA R.L.  ©2022 Powered by WKX</label>
   </div>
 </div>
  

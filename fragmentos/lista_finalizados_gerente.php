@@ -35,7 +35,9 @@ $total_items = ORM::for_table('informe')
         ->raw_query(
         " SELECT count(id) total ".
         " FROM informe ".
-        " WHERE deleted_at IS NULL AND estado='finalizado' AND id_institucion= $id_institucion $where_texto ")
+        " WHERE deleted_at IS NULL AND estado='finalizado' AND id_institucion= $id_institucion ".
+        " AND id_usuario= $usuario->id".
+        $where_texto )
          ->find_one();
 
 $total_items = $total_items->total;
@@ -45,6 +47,7 @@ $informes = ORM::for_table('informe')
         " SELECT * ".
         " FROM informe ".
         " WHERE deleted_at IS NULL AND estado='finalizado' AND id_institucion= $id_institucion ".
+        " AND id_usuario= $usuario->id".
         $where_texto.
         " ORDER BY created_at desc ".
         " LIMIT ".($pagina_actual*$items_x_pagina).", $items_x_pagina")

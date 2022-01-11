@@ -38,6 +38,15 @@ $usuario = $_SESSION['usuario'];
               <a href="reporte_x_estado.php" class="color_verde"><img src="img/ico_ver.png" > Reporte x Estado</a>
             </div>
           </div>
+          <div class="espacio"></div>
+          <div class="row">
+            <div class="col-6">
+              <a href="#" class="color_verde"><img src="img/ico_ver.png" > Reporte de Informes Finalizados</a>
+            </div>
+            <div class="col-6">
+              <a href="reporte_x_institucion.php" class="color_verde"><img src="img/ico_ver.png" > Reporte x Institución</a>
+            </div>
+          </div>
         </div>
         <div class="espacio"></div>
       </div>
