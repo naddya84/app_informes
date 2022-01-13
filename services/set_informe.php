@@ -64,7 +64,10 @@ if( isset($informe_json->id_institucion) ){
 }
 if( isset($informe_json->estado) ){
   $informe->estado = $informe_json->estado;
-}    
+} 
+if( isset($informe_json->observaciones)){
+  $informe->observaciones = $informe_json->observaciones;
+}
 $informe->id_usuario = $usuario->id; 
 
 ORM::get_db()->beginTransaction();
@@ -177,10 +180,10 @@ if( $informe->save() ){
       die();
     }
   }
-  if( isset($informe_json->documento_eliminar) ){                
-    if( count($informe_json->documento_eliminar) > 0 ){
+  if( isset($informe_json->eliminar_fotos_informe) ){                
+    if( count($informe_json->eliminar_fotos_informe) > 0 ){
       $delete_documento = ORM::for_table('documentos_informe')
-      ->where_id_in($informe_json->documento_eliminar)
+      ->where_id_in($informe_json->eliminar_fotos_informe)
       ->find_many();
 
       foreach ( $delete_documento as $documento ){

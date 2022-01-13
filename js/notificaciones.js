@@ -1,6 +1,10 @@
 function iniciar(){
-  $("#div_cargando").fadeOut();  
-   //Botones paginacion
+  $("#div_cargando").fadeOut();
+  
+  $(".css_inicio").removeClass("seleccionado");
+  $("#notificaciones").addClass("seleccionado");
+  
+  //Botones paginacion
   $('.btn_paginacion').click( function (){        
     $("#div_cargando").fadeIn();
      valor_historial = $("#historial").val();

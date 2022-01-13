@@ -1,5 +1,7 @@
 var my_drop;
 var fotos_informe = [];
+var fotos_eliminar = [];
+
 Dropzone.options.myDropzone = {
   paramName: "file", // The name that will be used to transfer the file
   maxFilesize: 20, // MB
@@ -37,6 +39,8 @@ Dropzone.options.myDropzone = {
 
 function iniciar(){  
   $("#div_cargando").fadeOut();
+  $(".css_inicio").removeClass("seleccionado");
+  $("#n_informes").addClass("seleccionado");
   $('.form_datetime').datetimepicker({
     weekStart: 1,
     todayBtn:  1,
@@ -66,6 +70,14 @@ function iniciar(){
       estado = "finalizado";
       registrar_informe(estado);
     }
+  });
+  $(".btn_eliminar_documento").unbind();
+  $(".btn_eliminar_documento").click( function (){
+    fotos_eliminar.push( $(this).parent().data("id_foto") );
+    if( $(this).parent().parent().children().length == 1 ){
+      $(this).parent().parent().parent().fadeOut();
+    }
+    $(this).parent().remove();
   });
 }
 function validar_datos(){
@@ -131,7 +143,9 @@ function registrar_informe(estado){
     email: $.trim( $("#email").val() ),
     id_institucion: $("#institucion").val() ,
     fotos_informe: fotos_informe,
-    estado: estado
+    eliminar_fotos_informe: fotos_eliminar,
+    estado: estado,
+    observaciones: $("#observacion").val()
   };
   if($("#id_informe").val() > 0){  
     data.id = $("#id_informe").val();

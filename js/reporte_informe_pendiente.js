@@ -2,7 +2,9 @@ var pagina_actual = 0;
 
 function iniciar(){ 
   $("#div_cargando").fadeOut();
-    
+  $(".css_inicio").removeClass("seleccionado");
+  $("#reportes").addClass("seleccionado");
+  
   $("#fecha_inicio").datepicker({
     changeMonth: true,
     changeYear: true,

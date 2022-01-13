@@ -1,7 +1,7 @@
 <?php
 
 define( 'PROJECT_ID', 'loyola-reportes' );
-define ('ACCESS_TOKEN', 'AAAA7rGiPQU:APA91bF5w3JfxvBgVXORDSnqPdKVUHMBA1hnVcUDDKY7hB1IIk94_1JBHlQBrfaZig2hlJiN7Nxn_ksQ46_JPzjaVkLvuKObWcNbF2yMP2tbctniugf563vG68WZc-ysJ8c272qEV9ya');
+define ('ACCESS_TOKEN', 'AAAA7rGiPQU:APA91bFrWRf7np2QoRCsP_Qc-OkPqOZAq5IJpKu7yvR7nOfauq6-brPunDc-hFA2kz4OXvzV523uTON5wb9VWmfUiRSlYpPA757dbZtAeCyoPRYTex2Aor_Q5xQfshACDZKivH5fufKK');
 
 function send_notificacion_disps( $id_usuario, $titulo, $cuerpo, $tipo = "normal"){
   
@@ -59,7 +59,7 @@ function send_notificacion_disps( $id_usuario, $titulo, $cuerpo, $tipo = "normal
     curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, true );
     curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode( $data ) );
     $result = curl_exec($ch );
-
+    
     if (curl_error($ch)) {
       $error_msg = curl_error($ch);
     }

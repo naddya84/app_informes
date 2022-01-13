@@ -12,7 +12,7 @@ if (!isset($_SESSION['usuario'])) {
 $usuario = $_SESSION['usuario'];
 }
 $final = new DateTime();  
-$final->modify("+ 25 day");  
+$final->modify("+ 20 day");  
 $fecha_final = $final->format("Y-m-d");  
 $fecha_inicial = date('Y-m-d', time()); 
 
@@ -21,7 +21,7 @@ $informes = ORM::for_table('informe')
         " SELECT * ".
         " FROM informe ".
         " WHERE deleted_at IS NULL AND estado='pendiente' AND id_usuario= $usuario->id".
-        " AND fecha_limite between '$fecha_inicial' AND '$fecha_final 23:59:59' ")
+        " AND fecha_limite between '$fecha_inicial 00:00:00' AND '$fecha_final 23:59:59' ")
         ->find_many();
 ?>
 <!--pop up alertas -->
@@ -53,7 +53,8 @@ $informes = ORM::for_table('informe')
       } else {
         $tiempo_restante = "Fuera de Tiempo";
       }
-      if($dias > 0 && $dias < 26){ ?>
+      
+      if($dias > 0){ ?>
       <div class="alerta_lila">
         <div class="texto_alerta"><?=$informe->detalle?></div>
         <div class="row">
@@ -62,7 +63,7 @@ $informes = ORM::for_table('informe')
         </div>
       </div>
       <?php }
-      if($dias < 0){ ?>
+      if($dias == "" && $horas > 0 ){  ?>
       <div class="alerta_naranja">
         <div class="texto_alerta"><?=$informe->detalle?></div>
         <div class="row">
@@ -71,7 +72,7 @@ $informes = ORM::for_table('informe')
         </div>
       </div>
       <?php } 
-      if($tiempo_restante == "Fuera de Tiempo"){?>
+      if($dias == "" && $horas == "" && $minutos > 0){?>
       <div class="alerta_roja">
         <div class="texto_alerta"><?=$informe->detalle?></div>
         <div class="row">

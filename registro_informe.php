@@ -141,19 +141,25 @@ $instituciones = ORM::for_table('institucion')->find_many();
               if(isset($informe_edit)){   
                 $fotos_informe = ORM::for_table('documentos_informe')->where('id_informe',$informe_edit->id)->find_many();
                 if($fotos_informe != null){?>
-                <div class="contenedor_doc">
+                <div class="contenedor_fotos">
                 <?php foreach($fotos_informe as $fotos){ ?>
-                  <input type="hidden" id="documento" value="<?=$fotos->url?>">
-                  <img src="img/ico_eliminar.png" class="cursor" id="btn_eliminar_documento">
-                  <a href="<?='uploads/'.$informe_edit->id.'/'.$fotos->url?>" target="_blank"><img src="<?='uploads/'.$informe_edit->id.'/'.$fotos->url?>" class="fotos_informe"></a>
+                  <div data-id_foto="<?=$fotos->id?>" class="left">
+                    <input type="hidden" id="documento" value="<?=$fotos->url?>">
+                    <img src="img/ico_eliminar.png" class="cursor btn_eliminar_documento">
+                    <a href="<?='uploads/'.$informe_edit->id.'/'.$fotos->url?>" target="_blank"><img src="<?='uploads/'.$informe_edit->id.'/'.$fotos->url?>" class="fotos_informe"></a>
+                  </div>
                 <?php } ?>
                 </div>
+              <div class="espacio"></div>
                <?php }
                }?>
               <div>
                 <label class="color_plomo">Fotos del Informe</label>
                 <form action="services/photoupload.php" class="dropzone" id="my-dropzone" method="POST"></form>
               </div>
+              <div class="espacio"></div>
+              <label class="color_plomo">Observaciones:</label>
+              <textarea type="text" class="css_textarea" id="observacion" ><?= isset($informe_edit) ?$informe_edit->observaciones: "" ?></textarea>
               <div class="espacio"></div>
               <div class="center">
                 <div id="btn_guardar" class="btn css_btn">GUARDAR</div>

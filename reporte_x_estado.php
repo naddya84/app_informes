@@ -194,7 +194,6 @@ $informes = ORM::for_table('informe')
       </div>
     </div>
     <?php include("pie_pagina.php"); ?>
-    <div class="menu_overlay"></div>
     <div id="div_cargando" class="fondo_block">
       <img src="img/cargando.gif" class="img_cargando">
     </div>

@@ -19,8 +19,14 @@ $usuario = $_SESSION['usuario'];
 
     <script src="js/libs/jquery-3.3.1.min.js"></script>    
     <script src="js/libs/js.cookie.js"></script>    
-    <script src="bootstrap/js/bootstrap.min.js"></script>       
+    <script src="bootstrap/js/bootstrap.min.js"></script>  
+    <script src="js/reportes.js"></script>
     <title>Loyola Informes</title>
+    <script type="text/javascript">
+      $(document).ready(function () {
+        iniciar();
+      });
+    </script>
   </head>
   <body>
     <div class="container-fluid">
@@ -52,5 +58,8 @@ $usuario = $_SESSION['usuario'];
       </div>
     </div>
     <?php include 'pie_pagina.php'; ?>
+    <div id="div_cargando" class="fondo_block">
+      <img src="img/cargando.gif" class="img_cargando">
+    </div>
   </body>
 </html>
