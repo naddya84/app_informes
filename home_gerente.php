@@ -46,6 +46,7 @@ if(isset( $_GET['alerta'])){
         <div class="alertas cursor" id="abrir_alertas"><img src="img/ico_alerta.png" class="css_alerta"> Alertas</div>
         <div class="row tm_opciones">                
           <div id="tab_pendientes" class="col tab_home">PENDIENTES</div>   
+          <div id="tab_en_proceso" class="col tab_home">EN PROCESO</div>  
           <div id="tab_finalizados" class="col tab_home">FINALIZADOS</div>   
         </div>
         <div class="fondo_tab">

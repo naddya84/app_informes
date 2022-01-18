@@ -14,6 +14,12 @@ function iniciar(lista){
     cargar_pendientes();
   });
   
+  $("#tab_en_proceso").click( function (){ 
+    $("#div_cargando").show();
+    pagina_actual = 0;
+    cargar_en_proceso();
+  });
+  
   $("#tab_finalizados").click( function (){ 
     $("#div_cargando").show();
     pagina_actual = 0;
@@ -73,7 +79,41 @@ function cargar_pendientes(){
     mostrar_alerta("No se pudo acceder a la lista de informes pendientes");
   });
 }
-
+function cargar_en_proceso(){ 
+  fetch('fragmentos/lista_en_proceso_gerente.php?pagina_actual='+pagina_actual+busqueda,  {
+    method: 'GET',
+    credentials: 'same-origin',    
+    mode: 'no-cors',
+    headers:{
+      'Content-Type': 'text/html'
+    }
+  })      
+  .then((res) => {return res.text();})
+  .then(function(response) {  
+    $("#tab_en_proceso").addClass("tab_home_sel");
+    $("#tab_pendientes").removeClass("tab_home_sel");
+    $("#tab_finalizados").removeClass("tab_home_sel");
+            
+    if( response != "sin_sesion" ){
+      $("#div_contenido").html(response);      
+               
+      $('.btn_paginacion').click( function (){   
+        $("#div_cargando").fadeIn();
+        pagina_actual = $(this).data("pagina");
+        busqueda = "&buscar_texto="+$("#texto_buscar").val();
+        cargar_en_proceso();
+      });  
+      $("#div_cargando").fadeOut();      
+    } else {
+      //No tiene sesion mandamos al inicio
+      window.location.href = "index.php";
+    }            
+  })
+  .catch( function(error){        
+    console.error(error);        
+    mostrar_alerta("No se pudo acceder a la lista de informes en proceso");
+  });
+}
 function cargar_finalizados(){ 
   fetch('fragmentos/lista_finalizados_gerente.php?pagina_actual='+pagina_actual+busqueda,  {
     method: 'GET',
