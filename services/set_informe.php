@@ -29,26 +29,17 @@ if( isset( $informe_json->id ) ){
   ))
     ->find_one();
 } else {
-  $informe = ORM::for_table('informe')->create();
+  die ( json_encode(array("success" => false,"reason" => "No envio el id del informe")));
 }
  
-if( isset($informe_json->nombre) ){
-  $informe->detalle = $informe_json->nombre;
-}
-if( isset($informe_json->codigo) ){
-  $informe->codigo = $informe_json->codigo;
-}
-if( isset($informe_json->periodo) ){
-  $informe->tipo_periodo = $informe_json->periodo;
-}
 if( isset($informe_json->tipo) ){
   $informe->tipo_envio = $informe_json->tipo;
 }
+if( isset($informe_json->tiempo_entrega) ){
+  $informe->tiempo_realizar = json_encode($informe_json->tiempo_entrega);
+}
 if( isset($informe_json->avance_informe) ){
   $informe->avance = $informe_json->avance_informe;
-}
-if( isset($informe_json->sistema_modulo) ){
-  $informe->sistema_modulo = $informe_json->sistema_modulo;
 }
 if( isset($informe_json->fecha_limite) ){
   $informe->fecha_limite = $informe_json->fecha_limite;
@@ -59,11 +50,13 @@ if( isset($informe_json->email) ){
 if( isset($informe_json->multa) ){
   $informe->multa = $informe_json->multa;
 }
-if( isset($informe_json->id_institucion) ){
-  $informe->id_institucion = $informe_json->id_institucion;
-}
 if( isset($informe_json->estado) ){
-  $informe->estado = $informe_json->estado;
+  if($informe_json->estado == "finalizado"){
+    $informe->estado = $informe_json->estado;
+    $informe->entrega = 1;
+  } else {
+    $informe->estado = $informe_json->estado;
+  }
 } 
 if( isset($informe_json->observaciones)){
   $informe->observaciones = $informe_json->observaciones;
@@ -74,7 +67,7 @@ ORM::get_db()->beginTransaction();
 
 if( $informe->save() ){ 
   
-  if( strcmp($informe_json->estado, "pendiente" ) == 0 ){
+  if( strcmp($informe_json->estado, "en_progreso" ) == 0 ){
     //Alerta gerente
     if( $usuario->rol == "jefe" ){
       $gerentes= ORM::for_table('usuario')->where('rol', 'gerente')->find_many();

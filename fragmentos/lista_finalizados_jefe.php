@@ -36,7 +36,7 @@ $total_items = ORM::for_table('informe')
         " SELECT count(inf.id) total ".
         " FROM informe inf".
         " LEFT JOIN informe_maestro inf_m ON ( inf_m.id = inf.id_informe_padre )".
-        " WHERE inf.deleted_at IS NULL AND inf.estado='finalizado'  $where_texto".
+        " WHERE inf.deleted_at IS NULL AND inf.estado='finalizado' ".
         " AND inf.id_usuario= $usuario->id")
          ->find_one();
 
@@ -44,11 +44,10 @@ $total_items = $total_items->total;
 
 $informes = ORM::for_table('informe')
         ->raw_query(
-        " SELECT inf_m.codigo, inf_m.detalle ".
+        " SELECT inf_m.codigo, inf_m.detalle, inf.id ".
         " FROM informe inf".
         " LEFT JOIN informe_maestro inf_m ON ( inf_m.id = inf.id_informe_padre )".
         " WHERE inf.deleted_at IS NULL AND inf.estado='finalizado' ".
-        $where_texto.
         " AND inf.id_usuario= $usuario->id".
         " ORDER BY inf.created_at desc ".
         " LIMIT ".($pagina_actual*$items_x_pagina).", $items_x_pagina")

@@ -276,7 +276,7 @@ a:hover{
   padding-left:  0px; 
 }
 .btn_detalle{
-  color: #f3c53a;
+  color: #fff;
 }
 /****Estilos pestañas home****/
 .tm_opciones{
@@ -331,7 +331,7 @@ a:hover{
 .img_alerta{
   margin-top: -8%;
 }
-.alerta_roja, .alerta_lila, .alerta_naranja{
+.alerta_roja, .alerta_lila, .alerta_naranja, .alerta_amarillo{
   width: 98%;
   margin-bottom: 6px;
   margin-left: -2%;
@@ -351,6 +351,11 @@ a:hover{
 .alerta_naranja{
   box-shadow: 2px -1px 3px 0px #c17036;
   background: #dfa651;
+  color: #b53302;
+}
+.alerta_amarillo{
+  box-shadow: 2px -1px 3px 0px #d9cb69;
+  background: #e9d753;
   color: #b53302;
 }
 .texto_alerta{
@@ -378,7 +383,7 @@ a:hover{
   color: #501117;
 }
 .fila_alerta_naranja {   
-  background: #e3a476;
+  background: #edba95;
   color: #8b2101;
 }
 .fila_alerta_lila {      
