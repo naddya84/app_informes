@@ -94,18 +94,20 @@ $data = json_decode($_GET['data']);
 $where_texto = "";
 if( isset( $data->texto ) ){
   $texto = $data->texto; 
-  $where_texto = " AND ( LOWER(codigo) LIKE LOWER('%$texto%') OR LOWER(detalle) LIKE LOWER('%$texto%') ) ";
+  $where_texto = " AND ( LOWER(inf_m.codigo) LIKE LOWER('%$texto%') OR LOWER(inf_m.detalle) LIKE LOWER('%$texto%') ) ";
 }
 $where_fecha = "";
 $fecha_inicial = $data->fecha_inicial;
 $fecha_final = $data->fecha_final;
 if( $fecha_inicial != "" && $fecha_final != "" ){    
-  $where_fecha = " AND created_at between '$fecha_inicial' AND '$fecha_final 23:59:59' ";
+  $where_fecha = " AND inf.created_at between '$fecha_inicial' AND '$fecha_final 23:59:59' ";
 }
 $informes = ORM::for_table('informe')
         ->raw_query(
-        " SELECT * from informe ".
-        " WHERE estado = 'pendiente' AND deleted_at IS NULL".
+        " SELECT inf_m.codigo, inf_m.detalle, inf_m.tipo_envio,inf_m.sistema_modulo, inf.id, inf.created_at, inf.estado ".
+        " FROM informe inf".
+        " LEFT JOIN informe_maestro inf_m ON ( inf_m.id = inf.id_informe_padre )".
+        " WHERE inf.deleted_at IS NULL".
         $where_texto.
         $where_fecha.        
         " ORDER BY  created_at asc ")
@@ -157,55 +159,61 @@ if( count($informes) > 0 ) {
       ->setCellValue('E6',  $titulosColumnas[4])
       ->setCellValue('F6',  $titulosColumnas[5])
       ->setCellValue('G6',  $titulosColumnas[6])
-      ->setCellValue('H6',  $titulosColumnas[7]);
+      ->setCellValue('H6',  $titulosColumnas[7])
+      ->setCellValue('I6',  $titulosColumnas[8]);
 
   $i=7;
   $numeral= 0; $responsable="";
   foreach ($informes as $informe) { 
     $responsable = ORM::for_table("usuario")->select("fullname")->find_one( $informe->id_usuario );
     $tiempo_restante = "";
-            $responsable = ORM::for_table("usuario")->select("fullname")->find_one( $informe->id_usuario );
-            
-            $limite = new DateTime($informe->fecha_limite);
-            $d1= new DateTime(); 
-            $d2= $limite;
+    $responsable = ORM::for_table("usuario")->select("fullname")->find_one( $informe->id_usuario );
+  
+    if($informe->estado == "en_proceso"){
+      $limite = new DateTime($informe->fecha_limite);
+      $d1= new DateTime(); 
+      $d2= $limite;
 
-            $dias = $horas = $minutos = "";
-            if( $d1 < $d2 ){ 
-              $interval= $d1->diff($d2);    
-            if( $interval->days > 0 ){
-              $dias = $interval->days." dias ";
-            }            
-            if( $interval->h > 0 ){
-              $horas = $interval->h." hrs.";      
-            }    
-            if( $interval->i > 0 ){
-              $minutos = $interval->i." min.";      
-            }    
-            $restante = "Tiene $dias $horas $minutos para enviar";
-            } else {
-              $restante = "Fuera de Tiempo";
-            }
+      $dias = $horas = $minutos = "";
+      if( $d1 < $d2 ){ 
+        $interval= $d1->diff($d2);    
+        if( $interval->days > 0 ){
+          $dias = $interval->days." dias ";
+        }            
+        if( $interval->h > 0 ){
+          $horas = $interval->h." hrs.";      
+        }    
+        if( $interval->i > 0 ){
+          $minutos = $interval->i." min.";      
+        }    
+        $restante = "Tiene $dias $horas $minutos para enviar";
+      } else {
+        $restante = "Fuera de Tiempo";
+      }
+    } else {
+      $restante = "";
+    }
     $objPHPExcel->setActiveSheetIndex(0)
         ->setCellValue('A'.$i, $numeral = $numeral + 1)
-        ->setCellValue('B'.$i, $informe->detalle)    
-        ->setCellValue('C'.$i, $informe->tipo_envio)      
-        ->setCellValue('D'.$i, $informe->sistema_modulo)    
-        ->setCellValue('E'.$i, $responsable->fullname)
-        ->setCellValue('F'.$i, (new DateTime($informe->created_at ))->format("d-m-Y"))
-        ->setCellValue('G'.$i, $restante)
-        ->setCellValue('H'.$i, $informe->avance);
-    $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':H'.$i.'')->applyFromArray($css_fila);
+        ->setCellValue('B'.$i, $informe->codigo)   
+        ->setCellValue('C'.$i, $informe->detalle)    
+        ->setCellValue('D'.$i, $informe->tipo_envio)      
+        ->setCellValue('E'.$i, $informe->sistema_modulo)    
+        ->setCellValue('F'.$i, $responsable->fullname)
+        ->setCellValue('G'.$i, (new DateTime($informe->fecha_limite ))->format("d-m-Y"))
+        ->setCellValue('H'.$i, $restante)
+        ->setCellValue('I'.$i, $informe->avance>0?$informe->avance." %":'-');
+    $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':I'.$i.'')->applyFromArray($css_fila);
     $i++;         
   }
   
-  $objPHPExcel->getActiveSheet()->getStyle('A1:H1')->applyFromArray($estiloTitulo);
-  $objPHPExcel->getActiveSheet()->getStyle('A2:H2')->applyFromArray($estiloTitulo);
-  $objPHPExcel->getActiveSheet()->getStyle('A6:H6')->applyFromArray($estiloTituloReporte);
+  $objPHPExcel->getActiveSheet()->getStyle('A1:I1')->applyFromArray($estiloTitulo);
+  $objPHPExcel->getActiveSheet()->getStyle('A2:I2')->applyFromArray($estiloTitulo);
+  $objPHPExcel->getActiveSheet()->getStyle('A6:I6')->applyFromArray($estiloTituloReporte);
   
   $objPHPExcel->getActiveSheet()->setTitle('Reporte x Estado');
 
-  for($i = 'A'; $i <= 'G'; $i++){
+  for($i = 'A'; $i <= 'I'; $i++){
       $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension($i)->setAutoSize(TRUE);
   }
   // Se activa la hoja para que sea la que se muestre cuando el archivo se abre
