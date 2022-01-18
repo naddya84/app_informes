@@ -19,7 +19,11 @@ function iniciar(lista){
     pagina_actual = 0;
     cargar_finalizados();
   }); 
-  
+  $("#tab_en_proceso").click( function (){ 
+    $("#div_cargando").show();
+    pagina_actual = 0;
+    cargar_en_proceso();
+  });
   $(".overlay_alerta").click( function (){ 
     $("#mensaje").fadeOut();
     $("#fondo_pop").fadeOut();
@@ -42,6 +46,7 @@ function cargar_pendientes(){
   .then((res) => {return res.text();})
   .then(function(response) {  
     $("#tab_pendientes").addClass("tab_home_sel");
+    $("#tab_en_proceso").removeClass("tab_home_sel");
     $("#tab_finalizados").removeClass("tab_home_sel");
             
     if( response != "sin_sesion" ){
@@ -52,10 +57,11 @@ function cargar_pendientes(){
         cargar_pendientes();
       });
       $('.btn_paginacion').click( function (){   
-          $("#div_cargando").fadeIn();
-          pagina_actual = $(this).data("pagina");
-          busqueda = "&buscar_texto="+$("#texto_buscar").val()+"&id_institucion="+$("#institucion").val();            
-          cargar_pendientes();
+        $("#div_cargando").fadeIn();
+        pagina_actual = $(this).data("pagina");
+        // busqueda = "&buscar_texto="+$("#texto_buscar").val()+"&id_institucion="+$("#institucion").val();
+        busqueda = "&buscar_texto="+$("#texto_buscar").val();
+        cargar_pendientes();
       });  
        
       $("#institucion").change( function () {    
@@ -73,7 +79,41 @@ function cargar_pendientes(){
     mostrar_alerta("No se pudo acceder a la lista de informes pendientes");
   });
 }
-
+function cargar_en_proceso(){ 
+  fetch('fragmentos/lista_en_proceso_jefe.php?pagina_actual='+pagina_actual+busqueda,  {
+    method: 'GET',
+    credentials: 'same-origin',    
+    mode: 'no-cors',
+    headers:{
+      'Content-Type': 'text/html'
+    }
+  })      
+  .then((res) => {return res.text();})
+  .then(function(response) {  
+    $("#tab_en_proceso").addClass("tab_home_sel");
+    $("#tab_pendientes").removeClass("tab_home_sel");
+    $("#tab_finalizados").removeClass("tab_home_sel");
+            
+    if( response != "sin_sesion" ){
+      $("#div_contenido").html(response);      
+               
+      $('.btn_paginacion').click( function (){   
+        $("#div_cargando").fadeIn();
+        pagina_actual = $(this).data("pagina");
+        busqueda = "&buscar_texto="+$("#texto_buscar").val();
+        cargar_en_proceso();
+      });  
+      $("#div_cargando").fadeOut();      
+    } else {
+      //No tiene sesion mandamos al inicio
+      window.location.href = "index.php";
+    }            
+  })
+  .catch( function(error){        
+    console.error(error);        
+    mostrar_alerta("No se pudo acceder a la lista de informes en proceso");
+  });
+}
 function cargar_finalizados(){ 
   fetch('fragmentos/lista_finalizados_jefe.php?pagina_actual='+pagina_actual+busqueda,  {
     method: 'GET',
@@ -86,7 +126,9 @@ function cargar_finalizados(){
   .then((res) => {return res.text();})
   .then(function(response) {  
     $("#tab_pendientes").removeClass("tab_home_sel");
+    $("#tab_en_proceso").removeClass("tab_home_sel");
     $("#tab_finalizados").addClass("tab_home_sel");
+    
             
     if( response != "sin_sesion" ){
       $("#div_contenido").html(response);      

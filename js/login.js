@@ -68,7 +68,11 @@ function ingresar_sistema(){
     })
     .then(function(response) {            
       if( response.success ){
-        window.location.href = "home_"+response.rol+".php?alerta=mostrar_alerta"        
+        if(response.rol == "administrador"){
+          window.location.href = "home_administrador.php";
+        }else{
+          window.location.href = "home_"+response.rol+".php?alerta=mostrar_alerta"
+        }
       } else {               
         $("#div_cargando").fadeOut();
         if( response.reason ){

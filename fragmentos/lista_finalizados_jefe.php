@@ -33,27 +33,29 @@ $items_x_pagina = 5;
 
 $total_items = ORM::for_table('informe')
         ->raw_query(
-        " SELECT count(id) total ".
-        " FROM informe ".
-        " WHERE deleted_at IS NULL AND estado='finalizado' AND id_institucion= $id_institucion $where_texto".
-        " AND id_usuario= $usuario->id")
+        " SELECT count(inf.id) total ".
+        " FROM informe inf".
+        " LEFT JOIN informe_maestro inf_m ON ( inf_m.id = inf.id_informe_padre )".
+        " WHERE inf.deleted_at IS NULL AND inf.estado='finalizado'  $where_texto".
+        " AND inf.id_usuario= $usuario->id")
          ->find_one();
 
 $total_items = $total_items->total;
 
 $informes = ORM::for_table('informe')
         ->raw_query(
-        " SELECT * ".
-        " FROM informe ".
-        " WHERE deleted_at IS NULL AND estado='finalizado' AND id_institucion= $id_institucion ".
+        " SELECT inf_m.codigo, inf_m.detalle ".
+        " FROM informe inf".
+        " LEFT JOIN informe_maestro inf_m ON ( inf_m.id = inf.id_informe_padre )".
+        " WHERE inf.deleted_at IS NULL AND inf.estado='finalizado' ".
         $where_texto.
-        " AND id_usuario= $usuario->id".
-        " ORDER BY created_at desc ".
+        " AND inf.id_usuario= $usuario->id".
+        " ORDER BY inf.created_at desc ".
         " LIMIT ".($pagina_actual*$items_x_pagina).", $items_x_pagina")
         ->find_many();
 
 ?>
-<div class="buscador row">
+<!--<div class="buscador row">
   <div class="col-4">
     <label>Institucion:</label>
     <select id="institucion">                                                                                 
@@ -68,7 +70,7 @@ $informes = ORM::for_table('informe')
     <div class="left"><input id="texto_buscar_r" type="text" value="<?=isset( $_GET['texto_buscar'] )?$_GET['texto_buscar']:''?>"/></div>
     <div id="btn_buscar" class="cursor"><img src="img/ico_buscar.png" title="Busqueda por código, periodo"/></div>
   </div>
-</div>
+</div>-->
 <div class="espacio"></div>
 <?php
 if (count($informes) <= 0) {
@@ -87,8 +89,6 @@ if (count($informes) <= 0) {
   <?php
   $index = 1;
   foreach ($informes as $informe) { 
-    $usuario = ORM::for_table('usuario')->where("id", $informe->id_usuario)->find_one();
-    $responsable = $usuario->fullname;
     ?>
     <div class="row css_row">
       <div class="col-lg"><?= $index ++ ?></div>

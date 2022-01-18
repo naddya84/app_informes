@@ -150,7 +150,7 @@ function registrar_informe(estado){
   if($("#id_informe").val() > 0){  
     data.id = $("#id_informe").val();
   } 
-  fetch('services/set_informe.php',  {
+  fetch('services/set_informe_maestro.php',  {
     method: 'POST',
     credentials: 'same-origin',
     body: JSON.stringify(data), 

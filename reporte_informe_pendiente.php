@@ -21,7 +21,7 @@ if( isset( $_GET['texto'] ) ){
   $texto = $_GET['texto']; 
 
   //Escapar aqui los caracteres del texto
-  $where_texto = " AND ( LOWER(codigo) LIKE LOWER('%$texto%') OR LOWER(detalle) LIKE LOWER('%$texto%') ) ";
+  $where_texto = " AND ( LOWER(inf_m.codigo) LIKE LOWER('%$texto%') OR LOWER(inf_m.detalle) LIKE LOWER('%$texto%') ) ";
 }
 
 $pagina_actual = 0;
@@ -42,14 +42,15 @@ if( isset( $_GET['fecha_ini'] ) ){
   $fecha_inicial = $_GET['fecha_ini'];  
   $fecha_final = $_GET['fecha_fin'];     
   if( $fecha_inicial != "" && $fecha_final != "" ){    
-    $where_fecha = " AND created_at between '$fecha_inicial' AND '$fecha_final 23:59:59' ";
+    $where_fecha = " AND inf.created_at between '$fecha_inicial' AND '$fecha_final 23:59:59' ";
   }
 }
  $total_items = ORM::for_table('informe')
         ->raw_query(
-        " SELECT count(id) total from informe ".
-        " WHERE estado = 'pendiente' ".
-        "AND deleted_at IS NULL".
+        " SELECT count(inf.id) total from informe inf".
+        " LEFT JOIN informe_maestro inf_m ON ( inf_m.id = inf.id_informe_padre )".
+        " WHERE inf.estado = 'pendiente' ".
+        "AND inf.deleted_at IS NULL".
         $where_texto.
         $where_fecha )
         ->find_one();
@@ -58,11 +59,12 @@ $total_items = $total_items->total;
 
 $informes = ORM::for_table('informe')
         ->raw_query(
-        " SELECT * from informe ".
-        " WHERE estado = 'pendiente' AND deleted_at IS NULL".
+        " SELECT inf_m.codigo, inf_m.detalle,inf_m.tipo_envio, inf_m.sistema_modulo, inf.id, inf.created_at from informe inf".
+        " LEFT JOIN informe_maestro inf_m ON ( inf_m.id = inf.id_informe_padre )".
+        " WHERE inf.estado = 'pendiente' AND inf.deleted_at IS NULL".
         $where_texto.
         $where_fecha.        
-        " ORDER BY  created_at asc ".
+        " ORDER BY  inf.created_at asc ".
         " LIMIT ".($pagina_actual*$items_x_pagina).", $items_x_pagina")
         ->find_many();
 ?>
@@ -158,7 +160,7 @@ $informes = ORM::for_table('informe')
               <div class="col-lg"><?=$informe->sistema_modulo ?></div>  
               <div class="col-lg"><?= $responsable->fullname ?></div>  
               <div class="col-lg"><?= (new DateTime($informe->created_at ))->format("d-m-Y") ?></div>
-              <div class="col-lg"><?=$informe->avance." %"?></div>
+              <div class="col-lg"><?=$informe->avance>0?$informe->avance." %":"-"?></div>
               <div class="col-lg"><a target='_blank' href='detalle_informe.php?id_informe=<?=$informe->id?>' class="btn_opciones">Ver Informe</a></div>  
             </div>
           <?php } ?>                  

@@ -37,6 +37,8 @@ if($usuario != null){
   
   $_SESSION["usuario"] = $usuario;  
   
+  require_once 'set_generacion_informes.php';
+  
   echo json_encode(array(
       "success" => true,
       "rol" => $usuario->rol    
