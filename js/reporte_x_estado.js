@@ -34,8 +34,11 @@ function iniciar(){
     if( $.trim($("#buscar_texto").val()) != "" ){
       texto = '&texto='+$("#buscar_texto").val();
     }        
-    
-    window.location.href = 'reporte_x_estado.php?'+"pagina_actual="+pagina_actual+texto+"&fecha_ini="+$("#fecha_inicio").val()+"&fecha_fin="+$("#fecha_fin").val();    
+    var estado = "";
+    if( $.trim($("#estado").val()) != "" ){
+      estado = '&estado='+$("#estado").val();
+    }  
+    window.location.href = 'reporte_x_estado.php?'+"pagina_actual="+pagina_actual+texto+"&fecha_ini="+$("#fecha_inicio").val()+"&fecha_fin="+$("#fecha_fin").val()+'&estado='+estado;    
   }); 
   
   $(".btn_limpiar").click( function (){
@@ -48,7 +51,11 @@ function iniciar(){
  
   $("#btn_buscar").click( function () {
     if( validar_datos() ){ 
-      window.location.href = 'reporte_x_estado.php?'+'texto='+$("#buscar_texto").val()+"&fecha_ini="+$("#fecha_inicio").val()+"&fecha_fin="+$("#fecha_fin").val();    
+      var estado = "";
+      if( $.trim($("#estado").val()) != "" ){
+        estado = '&estado='+$("#estado").val();
+      }
+      window.location.href = 'reporte_x_estado.php?'+'texto='+$("#buscar_texto").val()+estado+"&fecha_ini="+$("#fecha_inicio").val()+"&fecha_fin="+$("#fecha_fin").val();    
     } 
   });
   
@@ -58,6 +65,9 @@ function iniciar(){
       fecha_final: $("#fecha_fin").val(),
       texto: $("#buscar_texto").val()
     };
+    if($("#estado").val() != ""){
+      data.estado = $("#estado").val();
+    }
     window.open('services/reportes/informe_x_estado.php?data='+encodeURI(JSON.stringify(data)), '_blank');         
   });
 }

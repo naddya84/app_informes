@@ -96,6 +96,12 @@ if( isset( $data->texto ) ){
   $texto = $data->texto; 
   $where_texto = " AND ( LOWER(inf_m.codigo) LIKE LOWER('%$texto%') OR LOWER(inf_m.detalle) LIKE LOWER('%$texto%') ) ";
 }
+
+$where_estado ="";
+if(isset($data->estado)){
+  $where_estado = " AND inf.estado = '".$data->estado."'";
+}
+
 $where_fecha = "";
 $fecha_inicial = $data->fecha_inicial;
 $fecha_final = $data->fecha_final;
@@ -104,12 +110,13 @@ if( $fecha_inicial != "" && $fecha_final != "" ){
 }
 $informes = ORM::for_table('informe')
         ->raw_query(
-        " SELECT inf_m.codigo, inf_m.detalle, inf_m.tipo_envio,inf_m.sistema_modulo, inf.id, inf.created_at, inf.estado ".
+        " SELECT inf_m.codigo, inf_m.detalle, inf_m.tipo_envio,inf_m.sistema_modulo, inf.id, inf.created_at, inf.estado, inf.id_usuario ".
         " FROM informe inf".
         " LEFT JOIN informe_maestro inf_m ON ( inf_m.id = inf.id_informe_padre )".
         " WHERE inf.deleted_at IS NULL".
         $where_texto.
-        $where_fecha.        
+        $where_fecha. 
+        $where_estado.
         " ORDER BY  created_at asc ")
         ->find_many();
 
@@ -147,7 +154,7 @@ if( count($informes) > 0 ) {
     $objPHPExcel->setActiveSheetIndex(0)
           ->setCellValue('D5',$texto );   
   } 
-  $titulosColumnas = array('Nº', 'CODIGO', 'DETALLE', 'TIPO DE ENVIO', 'SISTEMA - MODULO', 'RESPONSABLE', 'FECHA LIMITE','TIEMPO RESTANTE', 'AVANCE');
+  $titulosColumnas = array('Nº', 'CODIGO', 'DETALLE', 'TIPO DE ENVIO', 'SISTEMA - MODULO', 'RESPONSABLE', 'FECHA LIMITE','TIEMPO RESTANTE', 'AVANCE','ESTADO');
  
   // Se agregan los titulos del reporte
   //Titulo de las columnas
@@ -160,7 +167,8 @@ if( count($informes) > 0 ) {
       ->setCellValue('F6',  $titulosColumnas[5])
       ->setCellValue('G6',  $titulosColumnas[6])
       ->setCellValue('H6',  $titulosColumnas[7])
-      ->setCellValue('I6',  $titulosColumnas[8]);
+      ->setCellValue('I6',  $titulosColumnas[8])
+      ->setCellValue('J6',  $titulosColumnas[9]);
 
   $i=7;
   $numeral= 0; $responsable="";
@@ -202,18 +210,19 @@ if( count($informes) > 0 ) {
         ->setCellValue('F'.$i, $responsable->fullname)
         ->setCellValue('G'.$i, (new DateTime($informe->fecha_limite ))->format("d-m-Y"))
         ->setCellValue('H'.$i, $restante)
-        ->setCellValue('I'.$i, $informe->avance>0?$informe->avance." %":'-');
-    $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':I'.$i.'')->applyFromArray($css_fila);
+        ->setCellValue('I'.$i, $informe->avance>0?$informe->avance." %":'-')
+        ->setCellValue('J'.$i, $informe->estado);
+    $objPHPExcel->getActiveSheet()->getStyle('A'.$i.':J'.$i.'')->applyFromArray($css_fila);
     $i++;         
   }
   
-  $objPHPExcel->getActiveSheet()->getStyle('A1:I1')->applyFromArray($estiloTitulo);
-  $objPHPExcel->getActiveSheet()->getStyle('A2:I2')->applyFromArray($estiloTitulo);
-  $objPHPExcel->getActiveSheet()->getStyle('A6:I6')->applyFromArray($estiloTituloReporte);
+  $objPHPExcel->getActiveSheet()->getStyle('A1:J1')->applyFromArray($estiloTitulo);
+  $objPHPExcel->getActiveSheet()->getStyle('A2:J2')->applyFromArray($estiloTitulo);
+  $objPHPExcel->getActiveSheet()->getStyle('A6:J6')->applyFromArray($estiloTituloReporte);
   
   $objPHPExcel->getActiveSheet()->setTitle('Reporte x Estado');
 
-  for($i = 'A'; $i <= 'I'; $i++){
+  for($i = 'A'; $i <= 'J'; $i++){
       $objPHPExcel->setActiveSheetIndex(0)->getColumnDimension($i)->setAutoSize(TRUE);
   }
   // Se activa la hoja para que sea la que se muestre cuando el archivo se abre

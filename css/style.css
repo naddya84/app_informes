@@ -482,6 +482,9 @@ a:hover{
 .margen_left{
   margin-left: 5%;
 }
+.margen{
+  margin-top: 1%;
+}
 .radio{
   display: inline;
  position: relative;

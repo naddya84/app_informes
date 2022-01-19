@@ -104,7 +104,7 @@ if( $fecha_inicial != "" && $fecha_final != "" ){
 }
 $informes = ORM::for_table('informe')
         ->raw_query(
-        " SELECT inf_m.codigo, inf_m.detalle,inf_m.tipo_envio, inf_m.sistema_modulo, inf.id, inf.created_at,inf.fecha_limite, inf.avance from informe inf".
+        " SELECT inf_m.codigo, inf_m.detalle,inf_m.tipo_envio, inf_m.sistema_modulo, inf.id, inf.created_at,inf.fecha_limite, inf.avance, inf.id_usuario from informe inf".
         " LEFT JOIN informe_maestro inf_m ON ( inf_m.id = inf.id_informe_padre )".
         " WHERE inf.estado = 'pendiente' AND inf.deleted_at IS NULL".
         $where_texto.

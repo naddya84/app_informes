@@ -24,6 +24,13 @@ if( isset( $_GET['texto'] ) ){
   $where_texto = " AND ( LOWER(inf_m.codigo) LIKE LOWER('%$texto%') OR LOWER(inf_m.detalle) LIKE LOWER('%$texto%') ) ";
 }
 
+$estado="";
+$where_estado ="";
+if(isset($_GET['estado'])){
+  $where_estado = " AND inf.estado = '".$_GET['estado']."'";
+  $estado = $_GET['estado'];
+}
+
 $pagina_actual = 0;
 if( isset($_GET["pagina_actual"]) ){
   $pagina_actual = $_GET["pagina_actual"];
@@ -51,19 +58,21 @@ if( isset( $_GET['fecha_ini'] ) ){
         " LEFT JOIN informe_maestro inf_m ON ( inf_m.id = inf.id_informe_padre )".
         " WHERE inf.deleted_at IS NULL".
         $where_texto.
-        $where_fecha )
+        $where_fecha.
+        $where_estado)
         ->find_one();
 
 $total_items = $total_items->total;
 
 $informes = ORM::for_table('informe')
         ->raw_query(
-        " SELECT inf_m.codigo, inf_m.detalle, inf_m.tipo_envio, inf.id, inf.created_at, inf.estado ".
+        " SELECT inf_m.codigo, inf_m.detalle, inf_m.tipo_envio, inf.id, inf.created_at, inf.estado, inf.id_usuario ".
         " FROM informe inf".
         " LEFT JOIN informe_maestro inf_m ON ( inf_m.id = inf.id_informe_padre )".
         " WHERE inf.deleted_at IS NULL".
         $where_texto.
-        $where_fecha.        
+        $where_fecha.
+        $where_estado.
         " ORDER BY  inf.created_at asc ".
         " LIMIT ".($pagina_actual*$items_x_pagina).", $items_x_pagina")
         ->find_many();
@@ -81,7 +90,7 @@ $informes = ORM::for_table('informe')
     <script src="js/libs/jquery-3.3.1.min.js"></script>
     <script src="js/libs/jquery-ui.js"></script>        
     <script src="bootstrap/js/bootstrap.min.js"></script> 
-    <script src="js/reporte_x_estado.js?v=1"></script>
+    <script src="js/reporte_x_estado.js?v=1.1"></script>
     <script type="text/javascript">
       $(document).ready(function () {
         iniciar();
@@ -99,15 +108,27 @@ $informes = ORM::for_table('informe')
           <a href id="btn_generar_excel"><img src="img/ico_excel.png" class="left"/><span class="color_verde" >Generar Excel</span></a>
           <div class="espacio"></div>
           <div class="row">
-            <div class="col-md">
-              <span class="left">Código/Detalle:</span>
+            <div class="col-md-4">
+              <label class="left">Código/Detalle:</label>
               <input id="buscar_texto" type="text" class="form-control" value='<?=$texto?>'/>
             </div>
-            <div class="col-md">
+            <div class="col-md-4">
+              <div>Estado:</div>
+              <select id="estado" class="form-control">
+                <option value=""></option>
+                <option value="pendiente" <?="pendiente"==$estado?"selected":""?>>Pendiente</option>
+                <option value="en_proceso" <?="en_proceso"==$estado?"selected":""?>>En Proceso</option>
+                <option value="finalizado" <?="finalizado"==$estado?"selected":""?>>Finalizado</option>
+              </select>
+            </div>
+          </div>
+          <div class="margen"></div>
+          <div class="row">
+            <div class="col-md-4">
               <span class="left">Fecha Inicial:  </span>
               <input id="fecha_inicio" type="text" class="form-control left" readonly <?= isset($_GET['fecha_ini']) ? "value='" .$_GET['fecha_ini']. "'" : "value='" .$fecha_inicial . "'"?>/>
             </div>
-            <div class="col-md">
+            <div class="col-md-4">
               <span class="left">Fecha Final:  </span>
               <input id="fecha_fin" type="text" class="form-control  left" readonly <?= isset($_GET['fecha_fin']) ? "value='" .$_GET['fecha_fin']. "'" : "value='" .$fecha_final . "'"?>/>
             </div>
