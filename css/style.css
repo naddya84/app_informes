@@ -459,6 +459,9 @@ a:hover{
 .bg_card{
   background: #fff;
 }
+.bg_card_green {
+  background: #d3e7de;
+}
 .font_titulo{
   color:#545658;
 }

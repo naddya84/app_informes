@@ -57,7 +57,7 @@ $informes = ORM::for_table('informe')
         $tiempo_restante = "Fuera de Tiempo";
       }
       
-      if( $dias <= 1 &&(($horas > 1 && $horas < 24) || ($horas >= 1 && ($minutos >10 && $minutos <=60 ))) ){ ?>
+      if( $dias == 0 &&(($horas > 1 && $horas < 24) || ($horas >= 1 && ($minutos >10 && $minutos <=60 ))) ){ ?>
       <div class="alerta_lila">
         <div class="texto_alerta"><?=$informe->detalle?></div>
         <div class="row">
@@ -66,7 +66,7 @@ $informes = ORM::for_table('informe')
         </div>
       </div>
       <?php }
-      if( $dias > 1 && $dias <= 2 ){  ?>
+      if( $dias >= 1 && $dias <= 2 ){  ?>
       <div class="alerta_naranja">
         <div class="texto_alerta"><?=$informe->detalle?></div>
         <div class="row">

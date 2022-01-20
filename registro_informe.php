@@ -17,6 +17,7 @@ if (isset($_GET['id_informe'])) {
   }
 }
 $instituciones = ORM::for_table('institucion')->find_many();
+$responsables = ORM::for_table('usuario')->find_many();
 ?>
 <!DOCTYPE html>
 <html>
@@ -25,17 +26,15 @@ $instituciones = ORM::for_table('institucion')->find_many();
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="bootstrap/css/bootstrap.min.css" rel="stylesheet">  
     <link href="css/jquery-ui.css" media="screen" rel="stylesheet" type="text/css" >
-    <link href="css/dropzone.css" rel="stylesheet">
     <link href="css/style.css?v=1" media="screen" rel="stylesheet" type="text/css" />
     <link href="css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
 
     <script src="js/libs/jquery-3.3.1.min.js"></script>
     <script src="js/libs/jquery-ui.js"></script>        
-    <script src="bootstrap/js/bootstrap.min.js"></script>     
-    <script src="js/libs/dropzone.js"></script>  
+    <script src="bootstrap/js/bootstrap.min.js"></script>    
     <script type="text/javascript" src="js/libs/bootstrap-datetimepicker.js" charset="UTF-8"></script>
     <script type="text/javascript" src="js/libs/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
-    <script src="js/registro_informe.js?v=1.1"></script>
+    <script src="js/registro_informe.js?v=1.0"></script>
     
     <script type="text/javascript">
       $(document).ready(function () {        
@@ -87,8 +86,28 @@ $instituciones = ORM::for_table('institucion')->find_many();
                   <input type="text" id="sistema_modulo" class="form-control input_form" <?= isset($informe_edit) ? "value='" .$informe_edit->sistema_modulo. "'" : "" ?>>
                 </div>
                 <div class="col">
-                  <label class="font_dato">Avance(%):</label>
-                  <input type="text" id="avance_informe" class="form-control input_form" <?= isset($informe_edit) ? "value='" .$informe_edit->avance. "'" : "" ?>>
+                  <label class="font_dato">	Archivos Electronicos:</label>
+                  <input type="text" id="archivos_electronicos" class="form-control input_form" <?= isset($informe_edit) ? "value='" .$informe_edit->archivos_electronicos. "'" : "" ?>>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col">
+                  <label class="font_dato">Información Remitida:</label>
+                  <input type="text" id="informacion_remitida" class="form-control input_form" <?= isset($informe_edit) ? "value='" .$informe_edit->informacion_remitida. "'" : "" ?>>
+                </div>
+                <div class="col">
+                  <label class="font_dato">Sección:</label>
+                  <input type="text" id="seccion" class="form-control input_form" <?= isset($informe_edit) ? "value='" .$informe_edit->seccion. "'" : "" ?>>
+                </div>
+              </div>
+              <div class="form-group row">
+                <div class="col">
+                  <label class="font_dato">Normativa:</label>
+                  <input type="text" id="normativa" class="form-control input_form" <?= isset($informe_edit) ? "value='" .$informe_edit->normativa. "'" : "" ?>>
+                </div>
+                <div class="col">
+                  <label class="font_dato">Articulo:</label>
+                  <input type="text" id="articulo" class="form-control input_form" <?= isset($informe_edit) ? "value='" .$informe_edit->articulo. "'" : "" ?>>
                 </div>
               </div>
               <div class="espacio"></div>
@@ -97,11 +116,11 @@ $instituciones = ORM::for_table('institucion')->find_many();
                   <label class="font_dato">Institucion:</label>
                   <select id="institucion" class="form-control input_form">
                     <option value="">Sin Asignar</option>                                                                                  
-                      <?php foreach ( $instituciones as $institucion ){ ?>
-                      <option value="<?=$institucion->id?>"
-                              <?=isset($informe_edit)?($informe_edit->id_institucion==$institucion->id?'selected':''):''?>><?=$institucion->nombre?></option>
-                      <?php } ?>
-                    </select>
+                    <?php foreach ( $instituciones as $institucion ){ ?>
+                    <option value="<?=$institucion->id?>"
+                      <?=isset($informe_edit)?($informe_edit->id_institucion==$institucion->id?'selected':''):''?>><?=$institucion->nombre?></option>
+                    <?php } ?>
+                  </select>
                 </div>
                 <div class="col">
                   <label class="font_dato">E-mail:</label>
@@ -127,43 +146,61 @@ $instituciones = ORM::for_table('institucion')->find_many();
               <div class="espacio"></div>
               <div class="form-group row">
                 <div class="col-6">
-                  <label class="font_datos">Fecha limite: </label>
+                  <label class="color_plomo">Plazo de Envio: </label>
                   <div class="input-group date form_datetime col-lg-3 col-md-5 margen_fecha"  data-date-format="yyyy-mm-dd hh:ii" >
-                    <input id="fecha_limite" class="form-control input_form" size="16" type="text" readonly  <?= isset($informe_edit) ? "value='" .$informe_edit->fecha_limite. "'" : "" ?>/>
+                    <input id="plazo_envio" class="form-control input_form" size="16" type="text" readonly  <?= isset($informe_edit) ? "value='" .$informe_edit->plazo_envio. "'" : "" ?>/>
                     <span class="input-group-addon"><span class="css_remove glyphicon-remove"><img src="img/ico_remove_datatime.png"></span></span>
                     <span class="input-group-addon"><span class="glyphicon-th"><img src="img/ico_datetime.png"></span></span>
                   </div>
                   <input type="hidden" id="dtp_input1" value="" />  
                 </div>  
               </div>
-              <div class="espacio"></div>
-              <?php 
-              if(isset($informe_edit)){   
-                $fotos_informe = ORM::for_table('documentos_informe')->where('id_informe',$informe_edit->id)->find_many();
-                if($fotos_informe != null){?>
-                <div class="contenedor_fotos">
-                <?php foreach($fotos_informe as $fotos){ ?>
-                  <div data-id_foto="<?=$fotos->id?>" class="left">
-                    <input type="hidden" id="documento" value="<?=$fotos->url?>">
-                    <img src="img/ico_eliminar.png" class="cursor btn_eliminar_documento">
-                    <a href="<?='uploads/'.$informe_edit->id.'/'.$fotos->url?>" target="_blank"><img src="<?='uploads/'.$informe_edit->id.'/'.$fotos->url?>" class="fotos_informe"></a>
-                  </div>
-                <?php } ?>
-                </div>
-              <div class="espacio"></div>
-               <?php }
-               }?>
               <div>
-                <label class="color_plomo">Fotos del Informe</label>
-                <form action="services/photoupload.php" class="dropzone" id="my-dropzone" method="POST"></form>
+              <?php $tiempo_realizar_informe = "";
+              if(isset($informe_edit)){
+                if($informe_edit->tipo_periodo == "diario") $max = 1;
+                if($informe_edit->tipo_periodo == "semanal") $max = 5;
+                if($informe_edit->tipo_periodo == "mensual") $max = 20;
+                if($informe_edit->tipo_periodo == "semestral") $max = 150;
+                if($informe_edit->tipo_periodo == "trimestral") $max = 90;
+                if($informe_edit->tipo_periodo == "anual") $max = 50;
+                if($informe->tiempo_realizar != null){
+                $tiempo_realizar_informe = json_decode($informe->tiempo_realizar);
+                }
+              }
+              ?>
+              <label class="color_plomo">Tiempo para realizar el informe:</label>
+              <div>
+                <span>Días:</span><input type="number" id="dias" <?=($tiempo_realizar_informe!="" && $tiempo_realizar_informe->dias != "")?"value='".$tiempo_realizar_informe->dias."'":""?>" min="0" max="<?=$max?>">
+                <span>Horas:</span><input type="number" id="horas" <?=($tiempo_realizar_informe!="" && $tiempo_realizar_informe->horas != "")?"value='".$tiempo_realizar_informe->horas."'":""?>" min="0" max="24">
+              </div>
               </div>
               <div class="espacio"></div>
-              <label class="color_plomo">Observaciones:</label>
-              <textarea type="text" class="css_textarea" id="observacion" ><?= isset($informe_edit) ?$informe_edit->observaciones: "" ?></textarea>
+              <div class="row">
+                <div class="col-6">
+                  <label class="color_plomo">Responsable1:</label>
+                  <select id="id_usuario" class="form-control input_form">
+                    <option value="">Sin Asignar</option>                                                                                  
+                    <?php foreach ( $responsables as $responsable ){ ?>
+                    <option value="<?=$responsable->id?>"
+                      <?=isset($informe_edit)?($informe_edit->id_usuario==$responsable->id?'selected':''):''?>><?=$responsable->fullname?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+                <div class="col-6">
+                  <label class="color_plomo">Responsable2:</label>
+                  <select id="id_usuario_2" class="form-control input_form">
+                    <option value="">Sin Asignar</option>                                                                                  
+                    <?php foreach ( $responsables as $responsable ){ ?>
+                    <option value="<?=$responsable->id?>"
+                      <?=isset($informe_edit)?($informe_edit->id_usuario==$responsable->id?'selected':''):''?>><?=$responsable->fullname?></option>
+                    <?php } ?>
+                  </select>
+                </div>              </div>
               <div class="espacio"></div>
               <div class="center">
                 <div id="btn_guardar" class="btn css_btn">GUARDAR</div>
-                <div id="btn_finalizar" class="btn css_btn" style="margin-left: 3%;margin-right: 3%">FINALIZAR</div>
+                <div class="margen_left"></div>
                 <a " href="javascript:history.back()" class="btn css_btn">VOLVER</a>
               </div>
             </div>

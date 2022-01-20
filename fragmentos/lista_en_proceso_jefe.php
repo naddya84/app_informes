@@ -100,10 +100,10 @@ if (count($informes) <= 0) {
     if($tiempo_restante == "Fuera de Tiempo"){ 
       echo '<div class="row css_row fila_alerta_roja">';
     }
-    elseif($dias > 1 && $dias <= 2){
+    elseif($dias >= 1 && $dias <= 2){
       echo '<div class="row css_row fila_alerta_naranja">';
     }
-    elseif( $dias <= 1 &&(($horas > 1 && $horas < 24) || ($horas >= 1 && ($minutos >10 && $minutos <=60 ))) ){
+    elseif( $dias == 0 &&(($horas > 1 && $horas < 24) || ($horas >= 1 && ($minutos >10 && $minutos <=60 ))) ){
       echo '<div class="row css_row fila_alerta_lila">';
     }
     elseif($dias >= 3 && $dias < 6){

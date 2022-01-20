@@ -22,13 +22,13 @@ if( !$request_body ){
   $informe_json = json_decode($request_body);
 }
 if( isset( $informe_json->id ) ){
-  $informe = ORM::for_table('informe')          
+  $informe = ORM::for_table('informe_maestro')          
     ->where(array(
       'id' => $informe_json->id
   ))
     ->find_one();
 } else {
-  $informe = ORM::for_table('informe')->create();
+  $informe = ORM::for_table('informe_maestro')->create();
 }
  
 if( isset($informe_json->nombre) ){
@@ -49,11 +49,11 @@ if( isset($informe_json->avance_informe) ){
 if( isset($informe_json->sistema_modulo) ){
   $informe->sistema_modulo = $informe_json->sistema_modulo;
 }
-if( isset($informe_json->fecha_limite) ){
-  $informe->fecha_limite = $informe_json->fecha_limite;
+if( isset($informe_json->plazo_envio) ){
+  $informe->plazo_envio = $informe_json->plazo_envio;
 }
 if( isset($informe_json->email) ){
-  $informe->complemetacion = $informe_json->email;
+  $informe->complementacion = $informe_json->email;
 }
 if( isset($informe_json->multa) ){
   $informe->multa = $informe_json->multa;
@@ -61,72 +61,29 @@ if( isset($informe_json->multa) ){
 if( isset($informe_json->id_institucion) ){
   $informe->id_institucion = $informe_json->id_institucion;
 }
-if( isset($informe_json->estado) ){
-  $informe->estado = $informe_json->estado;
-} 
-if( isset($informe_json->observaciones)){
-  $informe->observaciones = $informe_json->observaciones;
+
+$informe->estado = "pendiente";
+
+if( isset($informe_json->archivos_electronicos)){
+  $informe->archivos_electronicos = $informe_json->archivos_electronicos;
+}
+if( isset($informe_json->informacion_remitida)){
+  $informe->informacion_remitida = $informe_json->informacion_remitida;
+}
+if( isset($informe_json->seccion)){
+  $informe->seccion = $informe_json->seccion;
+}
+if( isset($informe_json->normativa)){
+  $informe->normativa = $informe_json->normativa;
+}
+if( isset($informe_json->articulo)){
+  $informe->articulo = $informe_json->articulo;
 }
 $informe->id_usuario = $usuario->id; 
 
 ORM::get_db()->beginTransaction();
 
-if( $informe->save() ){   
-  $ds = "/";  
-  $tempStoreFolder = '../uploads'.$ds.session_id().$ds;
-  $storeFolder = '../uploads'.$ds.$informe->id().$ds;
-    
-  if (!file_exists( $storeFolder )) {        
-      if ( !mkdir( $storeFolder, 0777, true) ){
-        ORM::get_db()->rollBack();    
-        die ( json_encode(array(
-          "success" => false,
-          "reason" => "No se pudo crear el directorio para guardar los archivos"
-        )));
-      }
-  }
-    
-  foreach ( $informe_json->fotos_informe as $foto_j ){    
-      
-    if( !rename( $tempStoreFolder.$foto_j, $storeFolder.$foto_j) ){
-      ORM::get_db()->rollBack();    
-      echo json_encode(array(
-          "success" => false,      
-          "reason" => "No se puede copiar las fotos del informe"
-      ));  
-      die();
-    }
-      
-    $documentos = ORM::for_table('documentos_informe')->create();
-    $documentos->url = $foto_j;
-    $documentos->descripcion = $storeFolder.$foto_j;
-    $documentos->id_informe = $informe->id();
-    $documentos->id_usuario = $usuario->id;
-
-    if( !$documentos->save() ){  
-      ORM::get_db()->rollBack();    
-      echo json_encode(array(
-          "success" => false,      
-          "reason" => "No se puede guardar los documentos del informe"
-      ));  
-      die();
-    }
-  }
-  if( isset($informe_json->eliminar_fotos_informe) ){                
-    if( count($informe_json->eliminar_fotos_informe) > 0 ){
-      $delete_documento = ORM::for_table('documentos_informe')
-      ->where_id_in($informe_json->eliminar_fotos_informe)
-      ->find_many();
-
-      foreach ( $delete_documento as $documento ){
-        if( file_exists($documento->descripcion) ){
-          unlink($documento->descripcion);
-        }
-        $documento->delete();      
-      }
-    }    
-  }
-  
+if( $informe->save() ){     
   $result = array(
       "success" => true,
       "id" => $informe->id()

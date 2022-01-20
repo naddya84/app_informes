@@ -117,7 +117,7 @@ if (count($informes) <= 0) {
       <div class="col-lg"><?= $informe->detalle ?></div> 
       <div class="col-lg"><?=$tiempo_restante?></div>   
       <div class="col-lg"><?= (new DateTime($informe->created_at))->format("d-m-Y") ?></div>    
-      <div class="col-lg"><a href="informe.php?id_informe=<?=$informe->id?>" class="btn_opciones">Editar informe</a></div>
+      <div class="col-lg"><a href="informe.php?id_informe=<?=$informe->id?>" class="btn_opciones">Iniciar informe</a></div>
     </div>  
   <?php } ?>                              
 

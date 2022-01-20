@@ -35,9 +35,6 @@ if( isset( $informe_json->id ) ){
 if( isset($informe_json->tipo) ){
   $informe->tipo_envio = $informe_json->tipo;
 }
-if( isset($informe_json->tiempo_entrega) ){
-  $informe->tiempo_realizar = json_encode($informe_json->tiempo_entrega);
-}
 if( isset($informe_json->avance_informe) ){
   $informe->avance = $informe_json->avance_informe;
 }
@@ -45,10 +42,7 @@ if( isset($informe_json->fecha_limite) ){
   $informe->fecha_limite = $informe_json->fecha_limite;
 }
 if( isset($informe_json->email) ){
-  $informe->complemetacion = $informe_json->email;
-}
-if( isset($informe_json->multa) ){
-  $informe->multa = $informe_json->multa;
+  $informe->email = $informe_json->email;
 }
 if( isset($informe_json->estado) ){
   if($informe_json->estado == "finalizado"){

@@ -33,7 +33,7 @@ if (isset($_GET['id_informe'])) {
     <script src="js/libs/dropzone.js"></script>  
     <script type="text/javascript" src="js/libs/bootstrap-datetimepicker.js" charset="UTF-8"></script>
     <script type="text/javascript" src="js/libs/locales/bootstrap-datetimepicker.fr.js" charset="UTF-8"></script>
-    <script src="js/informe.js?v=1.0"></script>
+    <script src="js/informe.js?v=1.1"></script>
     
     <script type="text/javascript">
       $(document).ready(function () {        
@@ -50,7 +50,7 @@ if (isset($_GET['id_informe'])) {
       <div class="fondo_paginas">
         <div class="espacio"></div>
           <div class="container">
-          <div class="card bg_card">
+          <div class="card bg_card_green">
             <div class="card-body">
               <div class="espacio"></div>
               <div class="center"><h3 class="font_titulo">Datos Informe</h3></div>
@@ -73,21 +73,46 @@ if (isset($_GET['id_informe'])) {
                 <div class="col">
                   <label class="font_dato">Sistema:</label><span> <?=$informe_maestro->sistema_modulo?></span>
                 </div>
-                <div class="col">
-                  <label class="font_dato">Avance(%):</label>
-                  <input type="text" id="avance_informe" class="form-control input_form" value="<?=$informe->avance?>">
+                <div class="col-6">
+                  <label class="font_dato">Institucion:</label>
                 </div>
               </div>
               <div class="espacio"></div>
               <div class="form-group row">
-                <div class="col-6">
-                  <label class="font_dato">Institucion:</label>
-                </div>
+                
                 <div class="col">
-                  <label class="font_dato">E-mail:</label>
-                  <input type="text" id="email" class="form-control input_form" <?= isset($informe) ? "value='" .$informe->complemetacion. "'" : "" ?>>
+                  <label class="color_plomo">Complementación:</label><span> <?=$informe->complemetacion?></span>
+                  
                 </div>
               </div>
+              <div class="espacio"></div>
+              <div class="form-group row">
+                <div class="col">
+                  <label class="color_plomo">Tipo de Envio: </label><span>  <?=$informe_maestro->tipo_envio?></span>
+                </div>
+                <div class="col">
+                  <label class="font_dato">Multa:</label><?=($informe_maestro->multa == "1")?$informe_maestro->multa:' No'?>
+                </div>
+              </div>
+              <div class="espacio"></div>
+              <?php
+              if($informe_maestro->tiempo_realizar != null){
+              $tiempo_realizar_informe = json_decode($informe->tiempo_realizar);
+              }else{
+                $tiempo_realizar_informe = "";
+              }
+              ?>
+              <label class="color_plomo">Tiempo para realizar el informe:</label>
+              <?=($tiempo_realizar_informe!="" && $tiempo_realizar_informe->dias != "")?"value='".$tiempo_realizar_informe->dias."'":" 0 "?><span> Días</span>
+              <?=($tiempo_realizar_informe!="" && $tiempo_realizar_informe->horas != "")?"value='".$tiempo_realizar_informe->horas."'":" 0 "?><span> Horas</span>
+             
+            </div>
+          </div>
+          <div class="margen"></div>
+          <div class="card">
+            <div class="card-body">
+              <div class="espacio"></div>
+              <h4 class="font_titulo">Completar Datos Informe</h4>
               <div class="espacio"></div>
               <div class="form-group row">
                 <div class="col">
@@ -97,43 +122,25 @@ if (isset($_GET['id_informe'])) {
                   <strong class="margen_left">Impreso - Correo </strong><input id="radio_tipo" type="radio" name="envio" value="i-c" class="radio" <?=($informe->tipo_envio == "i-c")?'checked="checked"':''?>/>
                 </div>
                 <div class="col">
-                  <label class="font_dato">Multa:</label>
-                  <strong> Si </strong>
-                  <input id="radio_a" type="radio" name="multa" value="1" class="radio" <?=($informe->multa == "1")?'checked="checked"':''?>/>
-                  <strong class="margen_left">No </strong>
-                  <input id="radio_a" type="radio" name="multa" value="0" class="radio" <?=($informe->multa == "0")?'checked="checked"':''?>/>
+                  <label class="font_dato">Avance(%):</label>
+                  <input type="text" id="avance_informe" class="form-control input_form" value="<?=$informe->avance?>">
                 </div>
               </div>
-              <div class="espacio"></div>
+              <div class="margen"></div>
               <div class="form-group row">
                 <div class="col-6">
                   <label class="font_datos">Fecha limite: </label>
-                  <div class="input-group date form_datetime col-lg-3 col-md-5 margen_fecha"  data-date-format="yyyy-mm-dd hh:ii" >
-                    <input id="fecha_limite" class="form-control input_form" size="16" type="text" readonly  <?= isset($informe) ? "value='" .$informe->fecha_limite. "'" : "" ?>/>
+                  <div class="input-group date form_datetime col-lg-2 col-md-5 margen_fecha"  data-date-format="yyyy-mm-dd hh:ii" >
+                    <input id="fecha_limite" class="form-control input_form" size="16" type="text" readonly  <?= $informe->fecha_limite !="" ? "value='" .$informe->fecha_limite. "'" : "" ?>/>
                     <span class="input-group-addon"><span class="css_remove glyphicon-remove"><img src="img/ico_remove_datatime.png"></span></span>
                     <span class="input-group-addon"><span class="glyphicon-th"><img src="img/ico_datetime.png"></span></span>
                   </div>
                   <input type="hidden" id="dtp_input1" value="" />  
                 </div>  
-              </div>
-              <div class="espacio"></div>
-              <?php 
-              if($informe_maestro->tipo_periodo == "diario") $max = 1;
-              if($informe_maestro->tipo_periodo == "semanal") $max = 5;
-              if($informe_maestro->tipo_periodo == "mensual") $max = 20;
-              if($informe_maestro->tipo_periodo == "semestral") $max = 150;
-              if($informe_maestro->tipo_periodo == "trimestral") $max = 90;
-              if($informe_maestro->tipo_periodo == "anual") $max = 50;
-              if($informe->tiempo_realizar != null){
-              $tiempo_realizar_informe = json_decode($informe->tiempo_realizar);
-              }else{
-                $tiempo_realizar_informe = "";
-              }
-              ?>
-              <label class="color_plomo">Tiempo para realizar el informe:</label>
-              <div>
-                <span>Días:</span><input type="number" id="dias" <?=($tiempo_realizar_informe!="" && $tiempo_realizar_informe->dias != "")?"value='".$tiempo_realizar_informe->dias."'":""?>" min="0" max="<?=$max?>">
-                <span>Horas:</span><input type="number" id="horas" <?=($tiempo_realizar_informe!="" && $tiempo_realizar_informe->horas != "")?"value='".$tiempo_realizar_informe->horas."'":""?>" min="0" max="24">
+                <div class="col-6">
+                  <label class="font_dato">E-mail:</label>
+                  <input type="text" id="email" class="form-control input_form" <?= ($informe->email != null) ? "value='" .$informe->email. "'" : "" ?>>
+                </div>
               </div>
               <div class="espacio"></div>
               <?php 
@@ -157,7 +164,7 @@ if (isset($_GET['id_informe'])) {
               </div>
               <div class="espacio"></div>
               <label class="color_plomo">Observaciones:</label>
-              <textarea type="text" class="css_textarea" id="observacion" ><?= isset($informe) ?$informe->observaciones: "" ?></textarea>
+              <textarea type="text" class="css_textarea" id="observacion" ><?=($informe->observaciones != null) ?$informe->observaciones: "" ?></textarea>
               <div class="espacio"></div>
               <div class="center">
                 <div id="btn_guardar" class="btn css_btn">GUARDAR</div>

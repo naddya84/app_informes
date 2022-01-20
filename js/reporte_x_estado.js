@@ -38,7 +38,7 @@ function iniciar(){
     if( $.trim($("#estado").val()) != "" ){
       estado = '&estado='+$("#estado").val();
     }  
-    window.location.href = 'reporte_x_estado.php?'+"pagina_actual="+pagina_actual+texto+"&fecha_ini="+$("#fecha_inicio").val()+"&fecha_fin="+$("#fecha_fin").val()+'&estado='+estado;    
+    window.location.href = 'reporte_x_estado.php?'+"pagina_actual="+pagina_actual+texto+"&fecha_ini="+$("#fecha_inicio").val()+"&fecha_fin="+$("#fecha_fin").val()+estado;    
   }); 
   
   $(".btn_limpiar").click( function (){

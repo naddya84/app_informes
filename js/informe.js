@@ -93,10 +93,6 @@ function validar_datos(){
   if (!$("input[name='envio']:checked").val()) {  
       mostrar_alerta("Debe seleccionar una opción de la sección tipo de envio");        
       return false;
-  }
-  if (!$("input[name='multa']:checked").val()) {  
-      mostrar_alerta("En multa, debe seleccionar una opción");        
-      return false;
   } 
   if ( $.trim($("#fecha_limite").val()) == ""){
       mostrar_alerta("Debes ingresar la fecha limite de envio del informe");
