@@ -28,6 +28,7 @@ $informes = ORM::for_table('informe')
 
 ?>
 <!--pop up alertas -->
+<input type="hidden" id="id_usuario" value="<?=$usuario->id?>">
 <div id="fondo_pop" class="overlay_alerta"></div>
 <div class="center">
   <div id="mensaje" class="popup_alerta">
@@ -93,8 +94,16 @@ $informes = ORM::for_table('informe')
         </div>
       </div>
       <?php } 
-      }
-    } else { ?>
+      } ?>
+      <div class="espacio"></div>
+      <div class="center"><div class="btn btn-dark" id="btn_compartir">Compartir Alertas</div></div>
+      <div id="div_email" style="display:none">
+        <label>Ingresa el Email del destinatario:</label>
+        <input type="text" id="email" class="form-control">
+        <div class="espacio"></div>
+        <div class="center"><div class="btn btn-dark" id="btn_enviar_email">Enviar Email</div></div>
+      </div>
+    <?php } else { ?>
       <div id="texto_mensaje">En este momento no existen alertas de informes pendientes</div>
     <?php }?>
     </div>

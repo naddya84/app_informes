@@ -27,8 +27,9 @@ if(isset( $_GET['alerta'])){
 
     <script src="js/libs/jquery-3.3.1.min.js"></script>    
     <script src="js/libs/js.cookie.js"></script>    
-    <script src="bootstrap/js/bootstrap.min.js"></script>        
-    <script src="js/home_jefe.js?v=1.2"></script>
+    <script src="bootstrap/js/bootstrap.min.js"></script>    
+    <script src="js/alls.js"></script>    
+    <script src="js/home_jefe.js?v=1.1"></script>
     
     <script type="text/javascript">
       $(document).ready(function () {
@@ -62,6 +63,16 @@ if(isset( $_GET['alerta'])){
       include 'pop_alerta.php';
     } ?>
     <?php include 'pie_pagina.php'; ?>
+    <!--Ventana emergente -->
+    <div id="popup" class="popup-overlay"></div>
+    <div id="mensaje_form" class="popup" >
+      <div class="content-popup">
+        <div id="btn_cerrar" class="btn_cerrar_pop"></div>
+        <div>
+          <div id="texto_mensaje"> </div>
+        </div>
+      </div>
+    </div>
     <div id="div_cargando" class="fondo_block">
       <img src="img/cargando.gif" class="img_cargando">
     </div>

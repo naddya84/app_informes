@@ -32,6 +32,13 @@ function iniciar(lista){
   $("#abrir_alertas").click( function (){ 
     cargar_alertas();
   });
+  $("#btn_compartir").click( function (){ 
+    $("#div_email").fadeIn();
+    $("#btn_compartir").hide();
+  });
+  $("#btn_enviar_email").click( function (){ 
+    enviar_email();
+  });
 }
 
 function cargar_pendientes(){ 
@@ -179,7 +186,16 @@ function cargar_alertas(){
       $("#mensaje").fadeOut();
       $("#fondo_pop").fadeOut();
     });
-  
+    
+    $("#btn_compartir").click( function (){ 
+      $("#div_email").fadeIn();
+      $("#btn_compartir").hide();
+    });
+
+    $("#btn_enviar_email").click( function (){ 
+      $("#div_cargando").fadeIn();
+      enviar_email();
+    });
   })
   .catch( function(error){        
     console.error(error);        
@@ -187,5 +203,39 @@ function cargar_alertas(){
   });
 }
 
-
+function enviar_email(){
+  var data = {
+    email: $.trim($("#email").val()),
+    id_usuario: $("#id_usuario").val()
+  }
+  
+  fetch('services/set_enviar_alertas.php',  {
+    method: 'POST',
+    credentials: 'same-origin',
+    body: JSON.stringify(data), 
+    headers:{ 'Content-Type': 'application/json'}
+  })      
+  
+  .then(function(response) {return response.json();})
+  .then(function(response) {                  
+    if( response.success ){  
+      $("#email").val("");
+      $("#mensaje").fadeOut();
+      $("#fondo_pop").fadeOut();
+      $("#div_cargando").fadeOut();
+      mostrar_alerta("El email se envio de forma exitosa!!!");
+      
+      $("#btn_cerrar").click( function () {               
+        cerrar_alerta();
+      });
+    } else {                       
+      $("#div_cargando").fadeOut();
+      mostrar_alerta(response.reason);
+    }
+  })
+  .catch( function(error){        
+    console.error(error);        
+    mostrar_alerta("No se pudo enviar el email");
+  });
+}
 

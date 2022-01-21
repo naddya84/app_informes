@@ -401,6 +401,9 @@ a:hover{
 .css_row_alerta{
   background: #75c39f;
 }
+#div_email{
+  margin: 2%;
+}
 /*Paginador*/
 .btn_paginacion{
   color: #343a40;

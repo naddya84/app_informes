@@ -8,6 +8,6 @@ function cerrar_alerta(){
 function mostrar_alerta(mensaje){
   $('#texto_mensaje').html(mensaje);
   $('#mensaje_form').fadeIn('slow');
-  $('#fondo_pop').fadeIn();
+  $('#popup').fadeIn();
 }
 
