@@ -37,10 +37,17 @@
   </div>      
 <?php } ?> 
 <?php if (strcmp($usuario->rol, "administrador") == 0) { ?>
-  <div class="contenedor_menu" id="menu_gerente">
+  <div class="contenedor_menu" id="menu_admin">
     <a class="css_inicio seleccionado left" href="home_administrador.php" >HOME</a>  
     <a class="css_inicio left" id ="n_informes" href="registro_informe.php">NUEVO INFORME</a>
     <a class="css_inicio left" id ="n_gestion" href="administrar_informes.php">ADMIN. GESTIÓN</a>
+    <a class="css_inicio left" href="cerrar_sesion.php">SALIR</a>
+  </div>      
+<?php } ?>
+<?php if (strcmp($usuario->rol, "auditor") == 0 || strcmp($usuario->rol, "asesor") == 0 || strcmp($usuario->rol, "responsable_uif") == 0) { ?>
+  <div class="contenedor_menu" id="menu">
+    <a class="css_inicio seleccionado left" href="home_usuario.php" >HOME</a>  
+    <a class="css_inicio left" id ="reportes" href="reportes.php">REPORTES</a>
     <a class="css_inicio left" href="cerrar_sesion.php">SALIR</a>
   </div>      
 <?php } ?>
@@ -51,6 +58,9 @@ function nombre_rol($rol){
     case 'administrador': return "Administrador";
     case 'jefe': return "Jefe";
     case 'gerente': return "Gerente";
+    case 'auditor': return "auditor";
+    case 'asesor': return "asesor";
+    case 'responsable_uif': return "responsable_uif";
     default: return $rol;  
   }
 }

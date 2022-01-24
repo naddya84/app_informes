@@ -67,10 +67,13 @@ function ingresar_sistema(){
       return response.json();
     })
     .then(function(response) {            
-      if( response.success ){
-        if(response.rol == "administrador"){
+      if( response.success ){ 
+        if(response.rol == "administrador"){ 
           window.location.href = "home_administrador.php";
-        }else{
+        }
+        if(response.rol == "auditor" || response.rol == "asesor" || response.rol == "responsable_uif"){ 
+          window.location.href = "home_usuario.php?alerta=mostrar_alerta"
+        } else {
           window.location.href = "home_"+response.rol+".php?alerta=mostrar_alerta"
         }
       } else {               
